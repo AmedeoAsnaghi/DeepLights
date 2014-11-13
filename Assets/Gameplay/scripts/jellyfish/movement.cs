@@ -1,71 +1,84 @@
-﻿using UnityEngine;
-using System.Collections;
+﻿	using UnityEngine;
+	using System.Collections;
 
-public class movement : MonoBehaviour {
+	public class movement : MonoBehaviour {
 
-	Animator an = null;
-	float speed = 2f;
-	float rotationSpeed = 120f;
-	bool i_am_moving = false;
-	Rigidbody2D rigidBody;
+		Animator an = null;
+		float speed = 4f;
+		float rotationSpeed = 120f;
+		bool i_am_moving = false;
+		Rigidbody2D rigidBody;
 
-	#region READ_KEYS
-	bool getLeft(){
-		return Input.GetKey (KeyCode.LeftArrow);
-	}
-	
-	bool getRight(){
-		return Input.GetKey (KeyCode.RightArrow);
-	}
-	
-	bool getThrust(){
-		return Input.GetKey (KeyCode.UpArrow);
-	}
-	
-	bool getFire(){
-		return Input.GetKeyDown (KeyCode.LeftControl);
-	}
-	#endregion
+		public float velocity;
+		public float maxSpeed;
+		public float deceleration;
 
-	// Use this for initialization
-	void Start () {
-		rigidBody = GetComponent<Rigidbody2D> () as Rigidbody2D;
-		an = GetComponent<Animator> () as Animator;
-	}
+		#region READ_KEYS
+		bool getLeft(){
+			return Input.GetKey (KeyCode.LeftArrow);
+		}
+		
+		bool getRight(){
+			return Input.GetKey (KeyCode.RightArrow);
+		}
+		
+		bool getThrust(){
+			return Input.GetKey (KeyCode.UpArrow);
+		}
+		
+		bool getFire(){
+			return Input.GetKeyDown (KeyCode.LeftControl);
+		}
+		#endregion
 
-	
-	// Update is called once per frame
-	void Update () {
-
-		if (getLeft ()) {
-			transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
+		// Use this for initialization
+		void Start () {
+			rigidBody = GetComponent<Rigidbody2D> () as Rigidbody2D;
+			an = GetComponent<Animator> () as Animator;
 		}
 
-		if (getRight ()) {
-			transform.Rotate(Vector3.forward * (-rotationSpeed) * Time.deltaTime);
-		}
+		
+		// Update is called once per frame
+		void Update () {
 
-		if (getThrust ()) {
-			//			transform.position += transform.up * speed * Time.deltaTime;
-			rigidBody.AddForce(transform.up*speed);
-			if (!i_am_moving){
-				i_am_moving = true;
-				an.SetBool("is_moving",true);
+			velocity = rigidBody.velocity.magnitude;
+
+			if (getLeft ()) {
+				transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
 			}
-		}
-		else {
-			if (i_am_moving){
-				i_am_moving = false;
-				an.SetBool("is_moving",false);
-			}
-		}
 
-		if (/*canShoot &&*/ getFire ()) {
-			//GameObject missile = Instantiate(prefabMissile, transform.position + transform.up * 0.45f, transform.rotation) as GameObject;
-			
-			//canShoot = false;
-			//StartCoroutine(WaitToShoot());
+			if (getRight ()) {
+				transform.Rotate(Vector3.forward * (-rotationSpeed) * Time.deltaTime);
+			}
+
+			if (getThrust ()) {
+							//			transform.position += transform.up * speed * Time.deltaTime;
+
+
+							if (rigidBody.velocity.magnitude < (Vector3.one * maxSpeed).magnitude)
+									rigidBody.AddForce (transform.up * speed);
+
+							if (!i_am_moving) {
+									i_am_moving = true;
+									an.SetBool ("is_moving", true);
+
+							}
+			}	
+			else {
+				if (i_am_moving){
+						i_am_moving = false;
+						an.SetBool("is_moving",false);
+					}
+				}
+
+
+
+			if (/*canShoot &&*/ getFire ()) {
+				//GameObject missile = Instantiate(prefabMissile, transform.position + transform.up * 0.45f, transform.rotation) as GameObject;
+				
+				//canShoot = false;
+				//StartCoroutine(WaitToShoot());
+			}
+		
 		}
-	
 	}
-}
