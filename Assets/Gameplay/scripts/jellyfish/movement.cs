@@ -76,7 +76,7 @@
 		}
 		
 
-		if (getThrust ()) {
+		if (getThrust () && !(an.GetBool("turning_right") || an.GetBool("turning_left"))) {
 						//			transform.position += transform.up * speed * Time.deltaTime;
 
 
