@@ -13,7 +13,6 @@
 
 	public float velocity;
 	public float maxSpeed;
-	public float deceleration;
 
 	private bool canMove;
 
