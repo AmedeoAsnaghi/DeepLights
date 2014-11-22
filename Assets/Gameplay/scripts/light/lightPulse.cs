@@ -2,14 +2,15 @@
 using System.Collections;
 
 public class lightPulse : MonoBehaviour {
+	float lightRange = 0;
+
 	public float duration = 2.0f;
-	public float lightRange;
 	public float pulsingFactor;
 	public float waveAmplitude;
 
 	// Use this for initialization
 	void Start () {
-		light.range = lightRange;
+		lightRange = light.range;
 	}
 	
 	// Update is called once per frame
