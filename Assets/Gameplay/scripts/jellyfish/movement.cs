@@ -4,7 +4,7 @@
 	public class movement : MonoBehaviour {
 
 	Animator an = null;
-	float speed = 4f;
+	float speed = 1f;
 	float rotationSpeed = 120f;
 	bool i_am_moving = false;
 	bool turning_right = false;
@@ -14,6 +14,8 @@
 	public float velocity;
 	public float maxSpeed;
 	public float deceleration;
+
+	private bool canMove;
 
 	#region READ_KEYS
 	bool getLeft(){
@@ -44,8 +46,9 @@
 	void Update () {
 
 		velocity = rigidBody.velocity.magnitude;
+		var currentState  = an.GetCurrentAnimatorStateInfo(0);		
 
-		if (getLeft ()) {
+		if (getLeft () && (currentState.nameHash != Animator.StringToHash("Base Layer.Charging"))) {
 			transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
 			
 			if (!turning_left) {
@@ -76,14 +79,18 @@
 		}
 		
 
-		if (getThrust () && !(an.GetBool("turning_right") || an.GetBool("turning_left"))) {
+		if (getThrust ())// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
+		{
 						//			transform.position += transform.up * speed * Time.deltaTime;
 
 
-			if (rigidBody.velocity.magnitude < (Vector3.one * maxSpeed).magnitude)
-					rigidBody.AddForce (transform.up * speed);
+			if ((currentState.nameHash == Animator.StringToHash("Base Layer.Moving")) && rigidBody.velocity.magnitude < (Vector3.one * maxSpeed).magnitude)
+					rigidBody.AddForce (transform.up * speed,ForceMode2D.Impulse);
 
-			if (!i_am_moving) {
+			if ((currentState.nameHash == Animator.StringToHash("Base Layer.Charging")) && rigidBody.velocity.magnitude < (Vector3.one * maxSpeed).magnitude)
+				rigidBody.AddForce (-transform.up * speed);
+
+				if (!i_am_moving) {
 					i_am_moving = true;
 					an.SetBool ("is_moving", true);
 
@@ -106,4 +113,5 @@
 		}
 	
 	}
+
 }
