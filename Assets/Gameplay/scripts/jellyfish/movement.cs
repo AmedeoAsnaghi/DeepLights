@@ -4,14 +4,14 @@
 	public class movement : MonoBehaviour {
 
 	Animator an = null;
-	float speed = 1f;
-	float rotationSpeed = 120f;
 	bool i_am_moving = false;
 	bool turning_right = false;
 	bool turning_left = false;
 	Rigidbody2D rigidBody;
+	float velocity;
 
-	public float velocity;
+	public float rotationSpeed = 120f;
+	public float speed = 1f;
 	public float maxSpeed;
 
 	private bool canMove;
@@ -44,7 +44,6 @@
 	// Update is called once per frame
 	void Update () {
 
-		velocity = rigidBody.velocity.magnitude;
 		var currentState  = an.GetCurrentAnimatorStateInfo(0);		
 
 		if (getLeft () && (currentState.nameHash != Animator.StringToHash("Base Layer.Charging"))) {
