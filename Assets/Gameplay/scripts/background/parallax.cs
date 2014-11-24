@@ -2,13 +2,10 @@
 using System.Collections;
 
 public class parallax : MonoBehaviour {
-	float movingRange = 0;
 
 	public float duration = 2.0f;
 	public float pulsingFactor;
 	public float waveAmplitude;
-
-	Animator an = null;
 
 	// Use this for initialization
 	void Start () {
@@ -20,7 +17,7 @@ public class parallax : MonoBehaviour {
 		// get cosine and transform from -1..1 to 0..1 range
 		var amplitude = Mathf.Cos( phi ) * waveAmplitude ;
 		
-		transform.position = new Vector3 (transform.position.x, transform.position.y + (float)amplitude);
+		transform.position = new Vector3 (transform.position.x+ (float)amplitude , transform.position.y);
 	
 	}
 }
