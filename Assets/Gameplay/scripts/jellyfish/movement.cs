@@ -82,10 +82,10 @@
 						//			transform.position += transform.up * speed * Time.deltaTime;
 
 
-			if ((currentState.nameHash == Animator.StringToHash("Base Layer.Moving")) && rigidBody.velocity.magnitude < (Vector3.one * maxSpeed).magnitude)
+			if ((currentState.nameHash == Animator.StringToHash("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
 					rigidBody.AddForce (transform.up * speed,ForceMode2D.Impulse);
 
-			if ((currentState.nameHash == Animator.StringToHash("Base Layer.Charging")) && rigidBody.velocity.magnitude < (Vector3.one * maxSpeed).magnitude)
+			if ((currentState.nameHash == Animator.StringToHash("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
 				rigidBody.AddForce (-transform.up * speed);
 
 				if (!i_am_moving) {

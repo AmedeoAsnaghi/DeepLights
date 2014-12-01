@@ -1,12 +1,13 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Gameplay\scripts\Crab\UpdateCollider.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Gameplay\scripts\jellyfish\movement.cs">
     <Files>
-      <File FileName="Assets\Gameplay\scripts\Crab\UpdateCollider.cs" Line="7" Column="15" />
-      <File FileName="Assets\Gameplay\scripts\jellyfish\movement.cs" Line="1" Column="1" />
+      <File FileName="Assets\Gameplay\scripts\Crab\UpdateCollider.cs" Line="32" Column="27" />
+      <File FileName="Assets\Gameplay\scripts\jellyfish\movement.cs" Line="88" Column="154" />
       <File FileName="Assets\Gameplay\scripts\jellyfish\collisions.cs" Line="1" Column="1" />
-      <File FileName="Assets\Gameplay\scripts\background\parallax.cs" Line="6" Column="31" />
-      <File FileName="Assets\Gameplay\scripts\Crab\Movement.cs" Line="21" Column="20" />
+      <File FileName="Assets\Gameplay\scripts\background\parallax.cs" Line="1" Column="1" />
+      <File FileName="Assets\Gameplay\scripts\Crab\Movement.cs" Line="1" Column="1" />
+      <File FileName="Assets\Gameplay\scripts\jellyfish\tentacles.cs" Line="21" Column="17" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
