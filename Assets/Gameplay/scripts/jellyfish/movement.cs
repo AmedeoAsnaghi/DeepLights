@@ -10,7 +10,7 @@
 	Rigidbody2D rigidBody;
 	float velocity;
 
-	public float rotationSpeed = 120f;
+	public float rotationSpeed;
 	public float speed = 1f;
 	public float maxSpeed;
 
