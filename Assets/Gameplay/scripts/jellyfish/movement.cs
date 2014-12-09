@@ -9,8 +9,10 @@
 	bool turning_left = false;
 	Rigidbody2D rigidBody;
 	float velocity;
+	float linearAccelleration;
 
 	public float rotationSpeed;
+	public float accellerationStep;
 	public float speed = 1f;
 	public float maxSpeed;
 
@@ -38,6 +40,7 @@
 	void Start () {
 		rigidBody = GetComponent<Rigidbody2D> () as Rigidbody2D;
 		an = GetComponent<Animator> () as Animator;
+		linearAccelleration = 0;
 	}
 
 	
@@ -47,8 +50,12 @@
 		var currentState  = an.GetCurrentAnimatorStateInfo(0);		
 
 		if (getLeft () && (currentState.nameHash != Animator.StringToHash("Base Layer.Charging"))) {
-			transform.Rotate(Vector3.forward * rotationSpeed * Time.deltaTime);
-			
+			//transform.Rotate(Vector3.forward * rotationSpeed * linearAccelleration * Time.deltaTime);
+			rigidBody.angularVelocity = rotationSpeed * linearAccelleration;
+
+			if(linearAccelleration < 1)
+				linearAccelleration+=accellerationStep;
+
 			if (!turning_left) {
 				turning_left = true;
 				an.SetBool ("turning_left", true);
@@ -58,21 +65,27 @@
 			if (turning_left){
 				turning_left = false;
 				an.SetBool("turning_left",false);
+				linearAccelleration = 0;
 			}
 		}
 
 		if (getRight ()) {
-					transform.Rotate (Vector3.forward * (-rotationSpeed) * Time.deltaTime);
-					
-					if (!turning_right) {
-							turning_right = true;
-							an.SetBool ("turning_right", true);
-					}
+			//transform.Rotate (Vector3.forward * (-rotationSpeed) * linearAccelleration * Time.deltaTime);
+			rigidBody.angularVelocity = -rotationSpeed * linearAccelleration;
+
+			if(linearAccelleration < 1)
+				linearAccelleration+=accellerationStep;
+
+			if (!turning_right) {
+				turning_right = true;
+				an.SetBool ("turning_right", true);
 			}
+		}
 		else {
 			if (turning_right){
 				turning_right = false;
 				an.SetBool("turning_right",false);
+				linearAccelleration = 0;
 			}
 		}
 		
@@ -111,5 +124,7 @@
 		}
 	
 	}
+
+
 
 }
