@@ -3,19 +3,19 @@ using System.Collections;
 
 public class parallax : MonoBehaviour {
 
-	GameObject camera = null;
+	GameObject mainCamera = null;
 	Vector3 cameraOldPos;
 	public float attenuation = 1f;
 
 	// Use this for initialization
 	void Start () {
-		camera = GameObject.Find ("Main Camera");
-		cameraOldPos = camera.transform.position;
+		mainCamera = GameObject.Find ("Main Camera");
+		cameraOldPos = mainCamera.transform.position;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		Vector3 cameraNewPos = camera.transform.position;
+		Vector3 cameraNewPos = mainCamera.transform.position;
 
 		if (cameraNewPos.x != cameraOldPos.x) {
 			float step = -(cameraNewPos.x - cameraOldPos.x)/attenuation;
