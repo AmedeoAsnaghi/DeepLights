@@ -8,7 +8,8 @@ public class GameManager : MonoBehaviour {
 	private GameObject jellyFish;
 	private Light[] lightVisible;
 	private Camera mainCamera;
-
+	private float oldSizeCamera;
+	private float lightRange;
 	private bool lightImpulse;
 
 	void Awake () {
@@ -19,12 +20,32 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		jellyFish = GameObject.FindWithTag ("Player");
 		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
+		lightRange = lightVisible[0].range;
 		mainCamera = Camera.main;
+		lightImpulse = false;
+		oldSizeCamera = mainCamera.orthographicSize;
+
 	}
 	
 	// Update is called once per frame
 	void Update () {
-	
+		if (lightImpulse) {
+			if(mainCamera.orthographicSize < 10f){
+				mainCamera.orthographicSize+=0.1f;
+				lightVisible[0].range += 0.1f;
+			}
+			if (lightVisible[0].range < lightRange + 10f){
+				lightVisible[0].range+=0.1f;
+			}
+		}
+		else{
+			if (mainCamera.orthographicSize > oldSizeCamera){
+				mainCamera.orthographicSize-=0.1f;
+			}
+			if (lightVisible[0].range > lightRange){
+				lightVisible[0].range -= 0.01f;
+			}
+		}
 	}
 
 	public void usePower(int type){
@@ -73,19 +94,21 @@ public class GameManager : MonoBehaviour {
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
 		lightImpulse = true;
-		float oldSizeCamera = mainCamera.orthographicSize;
-		while (mainCamera.orthographicSize < 10f) {
-			mainCamera.orthographicSize += Mathf.Log10(mainCamera.orthographicSize)*0.001f;		
-		}
 		StartCoroutine(WaitLightImpulse(3f,oldSizeCamera));
+
+		/*while (mainCamera.orthographicSize < 10f) {
+			//mainCamera.orthographicSize += Mathf.Log10(mainCamera.orthographicSize)*0.001f;	
+			mainCamera.transform.position.z+=0.01f;
+		}*/
+		//StartCoroutine(WaitLightImpulse(3f,oldSizeCamera));
 		//while (lightImpulse) {}
 
-		lightVisible[0].range += 10f;
 	}
 
 	IEnumerator WaitLightImpulse(float delay, float oldSizeCamera){
 		yield return new WaitForSeconds(delay);
-		returnLightImpulse(oldSizeCamera);
+		lightImpulse = false;
+		//returnLightImpulse(oldSizeCamera);
 	}
 
 	public void returnLightImpulse(float oldSizeCamera){
