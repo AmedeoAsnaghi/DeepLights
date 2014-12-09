@@ -15,10 +15,10 @@ public class guiStatus : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		rgb_texture.Apply();
-		GUIStyle generic_style = new GUIStyle();
-		GUI.skin.box = generic_style;
+		//rgb_texture.Apply();
+		//GUIStyle generic_style = new GUIStyle();
+		//GUI.skin.box = generic_style;
 		guiStats.text = (gameManager.showCurrentLife()).ToString();
-		GUI.Box(new Rect(0, 0, 0.001f * Screen.width * gameManager.showCurrentLife(),  0.1f * Screen.height), "LIFE",generic_style);
+		//GUI.Box(new Rect(0, 0, 0.001f * Screen.width * gameManager.showCurrentLife(),  0.1f * Screen.height), "LIFE",generic_style);
 	}
 }
