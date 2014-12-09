@@ -7,6 +7,7 @@ public class GameManager : MonoBehaviour {
 	private bool invincible = false;
 	private GameObject jellyFish;
 	private Light[] lightVisible;
+	private Camera mainCamera;
 
 	private bool lightImpulse;
 
@@ -18,6 +19,7 @@ public class GameManager : MonoBehaviour {
 	void Start () {
 		jellyFish = GameObject.FindWithTag ("Player");
 		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
+		mainCamera = Camera.main;
 	}
 	
 	// Update is called once per frame
@@ -71,23 +73,30 @@ public class GameManager : MonoBehaviour {
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
 		lightImpulse = true;
-		float oldSizeCamera = camera.orthographicSize;
-		while (camera.orthographicSize > 2f) {
-			camera.orthographicSize -= 0.2f;		
+		float oldSizeCamera = mainCamera.orthographicSize;
+		while (mainCamera.orthographicSize < 10f) {
+			mainCamera.orthographicSize += Mathf.Log10(mainCamera.orthographicSize)*0.001f;		
 		}
-		StartCoroutine(WaitLightImpulse());
-		while (lightImpulse) {
-				
-		}
+		StartCoroutine(WaitLightImpulse(3f,oldSizeCamera));
+		//while (lightImpulse) {}
+
 		lightVisible[0].range += 10f;
-		while(camera.orthographicSize < oldSizeCamera){
-			camera.orthographicSize += 0.2f;	
-		}
 	}
 
-	IEnumerator WaitLightImpulse(){
-		yield return new WaitForSeconds(3);
+	IEnumerator WaitLightImpulse(float delay, float oldSizeCamera){
+		yield return new WaitForSeconds(delay);
+		returnLightImpulse(oldSizeCamera);
+	}
+
+	public void returnLightImpulse(float oldSizeCamera){
+		while(mainCamera.orthographicSize > oldSizeCamera){
+			mainCamera.orthographicSize -= Mathf.Log10(mainCamera.orthographicSize)*0.001f;	
+		}
+		lightVisible[0].range -= 10f;
 		lightImpulse = false;
+	}
+	public bool CanPulse(){
+		return !lightImpulse;
 	}
 	//--------------------------------------- END SUPER POWERS ---------------------------------------
 

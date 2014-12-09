@@ -3,6 +3,7 @@
 
 	public class movement : MonoBehaviour {
 
+	private GameManager gameManager;
 	Animator an = null;
 	bool i_am_moving = false;
 	bool turning_right = false;
@@ -34,6 +35,9 @@
 	bool getFire(){
 		return Input.GetKeyDown (KeyCode.LeftControl);
 	}
+	bool getLightImpulse(){
+		return Input.GetKeyDown (KeyCode.Q);
+	}
 	#endregion
 
 	// Use this for initialization
@@ -41,6 +45,8 @@
 		rigidBody = GetComponent<Rigidbody2D> () as Rigidbody2D;
 		an = GetComponent<Animator> () as Animator;
 		linearAccelleration = 0;
+		GameObject controller = GameObject.Find("Controller");
+		gameManager = controller.GetComponent<GameManager> () as GameManager;
 	}
 
 	
@@ -115,7 +121,9 @@
 			}
 
 
-
+		if (getLightImpulse ()) {
+			gameManager.doLightImpulse();
+		}
 		if (/*canShoot &&*/ getFire ()) {
 			//GameObject missile = Instantiate(prefabMissile, transform.position + transform.up * 0.45f, transform.rotation) as GameObject;
 			
