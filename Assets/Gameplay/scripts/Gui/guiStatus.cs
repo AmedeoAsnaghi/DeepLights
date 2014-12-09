@@ -3,22 +3,28 @@ using System.Collections;
 
 public class guiStatus : MonoBehaviour {
 
-	private GUIText guiStats;
 	private GameManager gameManager;
-	Color rgb_color = new Color(255, 0, 0);
-	// Use this for initialization
+	float health;
+	public Texture2D currentLife;
+	public Texture2D maxLife;
+	public Material mat;
+	float x = 0;
+	float y = 0;
+	public float w;
+	public float h;
 	void Start () {
-		guiStats = GetComponent<GUIText> () as GUIText;
 		GameObject controller = GameObject.Find("Controller");
 		gameManager = controller.GetComponent<GameManager> () as GameManager;
+		health = gameManager.showCurrentLife();
 	}
-	
-	// Update is called once per frame
+	void OnGUI(){
+		Rect box = new Rect (x, y, 100 * 3f, h);
+		Graphics.DrawTexture(box, maxLife, mat);
+
+		Rect box1 = new Rect(x, y, health * 3f, h);
+		Graphics.DrawTexture(box1, currentLife, mat);
+	}
 	void Update () {
-		//rgb_texture.Apply();
-		//GUIStyle generic_style = new GUIStyle();
-		//GUI.skin.box = generic_style;
-		guiStats.text = (gameManager.showCurrentLife()).ToString();
-		//GUI.Box(new Rect(0, 0, 0.001f * Screen.width * gameManager.showCurrentLife(),  0.1f * Screen.height), "LIFE",generic_style);
+		health = gameManager.showCurrentLife();
 	}
 }
