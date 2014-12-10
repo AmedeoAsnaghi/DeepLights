@@ -6,25 +6,24 @@ public class guiStatus : MonoBehaviour {
 	private GameManager gameManager;
 	float health;
 	public Texture2D currentLife;
-	public Texture2D maxLife;
-	public Material mat;
-	float x = 0;
-	float y = 0;
-	public float w;
-	public float h;
+	public float x = 0;
+	public float y = 0.9f;
+	GUITexture gt;
+
 	void Start () {
 		GameObject controller = GameObject.Find("Controller");
 		gameManager = controller.GetComponent<GameManager> () as GameManager;
 		health = gameManager.showCurrentLife();
+		gt = gameObject.GetComponent<GUITexture> () as GUITexture;
+		gt.transform.position = new Vector3(x,y,0);
+		gt.transform.localScale = Vector3.zero;
+		gt.texture = currentLife;
+		gt.pixelInset = new Rect(0, 0, Screen.width/2,Screen.width/20);
 	}
-	void OnGUI(){
-		Rect box = new Rect (x, y, 100 * 3f, h);
-		Graphics.DrawTexture(box, maxLife, mat);
 
-		Rect box1 = new Rect(x, y, health * 3f, h);
-		Graphics.DrawTexture(box1, currentLife, mat);
-	}
+
 	void Update () {
 		health = gameManager.showCurrentLife();
+		gt.pixelInset = new Rect(0, 0, health*5,Screen.width/20);
 	}
 }
