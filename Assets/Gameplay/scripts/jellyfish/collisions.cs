@@ -28,6 +28,11 @@ public class collisions : MonoBehaviour {
 		if (other.gameObject.tag == "Pincers") {
 			gameManager.decreaseLife(10);
 		}
+
+		if (other.gameObject.tag == "Predator") {
+			if (other.GetType() == typeof(BoxCollider2D))
+				gameManager.decreaseLife(20);
+		}
 	}
 
 
