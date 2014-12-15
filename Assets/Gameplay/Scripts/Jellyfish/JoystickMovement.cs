@@ -1,7 +1,7 @@
-﻿	using UnityEngine;
-	using System.Collections;
+﻿using UnityEngine;
+using System.Collections;
 
-	public class movement : MonoBehaviour {
+public class JoystickMovement : MonoBehaviour {
 
 	private GameManager gameManager;
 	Animator an = null;
@@ -11,36 +11,32 @@
 	Rigidbody2D rigidBody;
 	float velocity;
 	float linearAccelleration;
-
-	public float rotationSpeed;
-	public float accellerationStep;
-	public float speed = 1f;
-	public float maxSpeed;
-
+	
+	public float rotationSpeed = 240f;
+	public float accellerationStep = 0.03f;
+	public float speed = 0.01f;
+	public float maxSpeed = 2f;
+	
 	private bool canMove;
-
+	
 	#region READ_KEYS
-	bool getLeft(){
-		return Input.GetKey (KeyCode.LeftArrow);
-	}
+	float getTurn() {
+		return Input.GetAxis("Horizontal");
+		}
 	
-	bool getRight(){
-		return Input.GetKey (KeyCode.RightArrow);
-	}
-	
-	bool getThrust(){
-		return Input.GetKey (KeyCode.UpArrow);
-	}
-	
-	bool getFire(){
-		return Input.GetKeyDown (KeyCode.LeftControl);
+	float getThrust(){
+		if (Input.GetAxis ("Vertical") > 0)
+			return Input.GetAxis ("Vertical");
+		else {
+			return 0;
+		}
 	}
 
 	bool getLightImpulse(){
-		return (Input.GetKeyDown(KeyCode.Q));
+		return Input.GetButtonDown("LightImpulse");
 	}
 	#endregion
-
+	
 	// Use this for initialization
 	void Start () {
 		rigidBody = GetComponent<Rigidbody2D> () as Rigidbody2D;
@@ -49,15 +45,16 @@
 		GameObject controller = GameObject.Find("Controller");
 		gameManager = controller.GetComponent<GameManager> () as GameManager;
 	}
-
+	
 	
 	// Update is called once per frame
 	void Update () {
 		var currentState  = an.GetCurrentAnimatorStateInfo(0);	
 
-		if (getLeft () && (currentState.nameHash != Animator.StringToHash ("Base Layer.Charging"))) {
+		/*---TURN_LEFT----*/
+		if (getTurn () < 0) {
 			//transform.Rotate(Vector3.forward * rotationSpeed * linearAccelleration * Time.deltaTime);
-			rigidBody.angularVelocity = rotationSpeed * linearAccelleration;
+			rigidBody.angularVelocity = -getTurn()*rotationSpeed * linearAccelleration;
 			if (linearAccelleration < 1)
 				linearAccelleration += accellerationStep;
 			if (!turning_left) {
@@ -72,9 +69,11 @@
 				linearAccelleration = 0;
 			}
 		}
-		if (getRight ()) {
+
+		/*---TURN_RIGHT----*/
+		if (getTurn () > 0) {
 			//transform.Rotate (Vector3.forward * (-rotationSpeed) * linearAccelleration * Time.deltaTime);
-			rigidBody.angularVelocity = -rotationSpeed * linearAccelleration;
+			rigidBody.angularVelocity = -getTurn()*rotationSpeed * linearAccelleration;
 			if (linearAccelleration < 1)
 				linearAccelleration += accellerationStep;
 			if (!turning_right) {
@@ -89,13 +88,13 @@
 				linearAccelleration = 0;
 			}
 		}
-		if (getThrust ())// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
+		if (getThrust () != 0)// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
 		{
 			//			transform.position += transform.up * speed * Time.deltaTime;
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
-				rigidBody.AddForce (transform.up * speed, ForceMode2D.Impulse);
+				rigidBody.AddForce (getThrust()*transform.up * speed, ForceMode2D.Impulse);
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
-				rigidBody.AddForce (-transform.up * speed);
+				rigidBody.AddForce (-getThrust()*transform.up * speed);
 			if (!i_am_moving) {
 				i_am_moving = true;
 				an.SetBool ("is_moving", true);
@@ -110,10 +109,6 @@
 		if (getLightImpulse ()) {
 			gameManager.doLightImpulse ();
 		}
-		if (/*canShoot &&*/getFire ()) {
-			//GameObject missile = Instantiate(prefabMissile, transform.position + transform.up * 0.45f, transform.rotation) as GameObject;
-			//canShoot = false;
-			//StartCoroutine(WaitToShoot());
-		}
+
 	}
 }
