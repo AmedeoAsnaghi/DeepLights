@@ -25,14 +25,19 @@ public class collisions : MonoBehaviour {
 			gameManager.increaseLife(10);	
 		} 
 		//TODO: manage other collision
-		if (other.gameObject.tag == "Pincers") {
+		else if (other.gameObject.tag == "Pincers") {
 			gameManager.decreaseLife(10);
 		}
 
-		if (other.gameObject.tag == "Predator") {
+		else if (other.gameObject.tag == "Predator") {
 			if (other.GetType() == typeof(BoxCollider2D))
 				gameManager.decreaseLife(20);
 		}
+		else if (other.gameObject.tag == "assassinAlga") {
+			if (other.GetType() == typeof(BoxCollider2D))
+				gameManager.decreaseLife(10);
+		}
+
 	}
 
 
