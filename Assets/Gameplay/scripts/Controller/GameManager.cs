@@ -11,6 +11,8 @@ public class GameManager : MonoBehaviour {
 	private float oldSizeCamera;
 	private float lightRange;
 	private bool lightImpulse;
+	
+	private Animator anImpulse;
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour {
 		mainCamera = Camera.main;
 		lightImpulse = false;
 		oldSizeCamera = mainCamera.orthographicSize;
+		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
 
 	}
 	
@@ -93,21 +96,18 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
-		lightImpulse = true;
-		StartCoroutine(WaitLightImpulse(3f,oldSizeCamera));
-
-		/*while (mainCamera.orthographicSize < 10f) {
-			//mainCamera.orthographicSize += Mathf.Log10(mainCamera.orthographicSize)*0.001f;	
-			mainCamera.transform.position.z+=0.01f;
-		}*/
-		//StartCoroutine(WaitLightImpulse(3f,oldSizeCamera));
-		//while (lightImpulse) {}
+		if (!lightImpulse) {
+			lightImpulse = true;
+			anImpulse.SetBool ("impulsePower", true);
+			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
+		}
 
 	}
 
 	IEnumerator WaitLightImpulse(float delay, float oldSizeCamera){
 		yield return new WaitForSeconds(delay);
 		lightImpulse = false;
+		anImpulse.SetBool ("impulsePower", false);
 		//returnLightImpulse(oldSizeCamera);
 	}
 
@@ -117,6 +117,7 @@ public class GameManager : MonoBehaviour {
 		}
 		lightVisible[0].range -= 10f;
 		lightImpulse = false;
+
 	}
 	public bool CanPulse(){
 		return !lightImpulse;
