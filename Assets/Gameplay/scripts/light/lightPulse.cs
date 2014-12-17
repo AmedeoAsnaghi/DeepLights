@@ -13,7 +13,7 @@ public class lightPulse : MonoBehaviour {
 	void Start () {
 		GameObject controller = GameObject.Find("Controller");
 		gameManager = controller.GetComponent<GameManager> () as GameManager;
-		lightRange = light.range;
+		lightRange = light.range * gameManager.showCurrentLife()/100;
 	}
 	
 	// Update is called once per frame
@@ -23,7 +23,7 @@ public class lightPulse : MonoBehaviour {
 			// get cosine and transform from -1..1 to 0..1 range
 			var amplitude = Mathf.Cos (phi) * waveAmplitude;
 
-			light.range = lightRange + (float)amplitude;
+			light.range = (lightRange + (float)amplitude)*gameManager.showCurrentLife()/100;
 		}
 	}
 }

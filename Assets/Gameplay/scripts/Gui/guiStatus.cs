@@ -5,10 +5,13 @@ public class guiStatus : MonoBehaviour {
 
 	private GameManager gameManager;
 	private int count;
+	//private int healthCount;
 	private float health;
 	private float oldHealth;
-	private bool decreaseLife;
-	private bool increaseLife;
+	private Queue increaseLife;	
+	private bool increase;
+	private bool running;
+	//private bool increaseLife;
 	private int currentHealthFrame;
 	private object[] objects;
 	public float x = 0;
@@ -25,6 +28,7 @@ public class guiStatus : MonoBehaviour {
 		gt = gameObject.GetComponent<GUITexture> () as GUITexture;
 		gt.transform.position = new Vector3(x,y,0);
 		gt.transform.localScale = Vector3.zero;
+		increaseLife = new Queue ();
 
 		this.objects = Resources.LoadAll("LifeDecrease", typeof(Texture)); 
 
@@ -45,9 +49,7 @@ public class guiStatus : MonoBehaviour {
 		gt.texture = this.decreaseLifeTextures[0];
 		gt.pixelInset = new Rect(-70, -200, 400,400);
 		currentHealthFrame = 0;
-
-		decreaseLife = false;
-		increaseLife = false;
+		running = false;
 	}
 
 
@@ -58,40 +60,40 @@ public class guiStatus : MonoBehaviour {
 		if (health != oldHealth) {
 			deltaHealth = oldHealth-health;
 			if (deltaHealth > 0) {
-				decreaseLife = true;
-				count = 0;
+				increaseLife.Enqueue(false);
 			}
 			else {
-				increaseLife = true;
-				count = 0;
+				increaseLife.Enqueue(true);
 			}
 			oldHealth = health;
 		}
-
-		if (decreaseLife) {
-			decreaseLife = false;
-			StartCoroutine(DecreaseLife(0.05f,deltaHealth));
+		if (increaseLife.Count != 0 && running == false) {
+			increase = (bool)increaseLife.Dequeue ();
+			running = true;
+			count = 0;
 		}
 
-		if (increaseLife){
-			increaseLife = false;
-			StartCoroutine(IncreaseLife(0.05f,deltaHealth));
+		if (running) {
+			if (increase) {
+				StartCoroutine (IncreaseLife (0.01f, deltaHealth));
+			} else {
+				StartCoroutine (DecreaseLife (0.01f, deltaHealth));
+			}
 		}
-
-
 		gt.pixelInset = new Rect(-70, -200, 400,400);
 	}
 
 	IEnumerator DecreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
 		int i = currentHealthFrame;
-		gt.texture = this.decreaseLifeTextures[i];
+		if (currentHealthFrame<this.decreaseLifeTextures.Length)
+			gt.texture = this.decreaseLifeTextures[i];
 		i++;
 		count ++;
 		currentHealthFrame = i;
-		decreaseLife = true;
+
 		if (48 == count) {
-			decreaseLife = false;	
+			running = false;	
 			i = 0;
 		}
 	}
@@ -99,13 +101,14 @@ public class guiStatus : MonoBehaviour {
 	IEnumerator IncreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
 		int i = 193 - currentHealthFrame;
-		gt.texture = this.increaseLifeTextures[i];
+		if (currentHealthFrame<this.decreaseLifeTextures.Length)
+			gt.texture = this.increaseLifeTextures[i];
 		i++;
 		count++;
 		currentHealthFrame = 193 - i;
-		increaseLife = true;
+
 		if (48 == count) {
-			increaseLife = false;	
+			running = false;	
 			i = 0;
 		}
 	}
