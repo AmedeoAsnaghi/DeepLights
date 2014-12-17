@@ -24,12 +24,8 @@ public class JoystickMovement : MonoBehaviour {
 		return Input.GetAxis("Horizontal");
 		}
 	
-	float getThrust(){
-		if (Input.GetAxis ("Vertical") > 0)
-			return Input.GetAxis ("Vertical");
-		else {
-			return 0;
-		}
+	bool getThrust(){
+		return Input.GetButton("MovementImpulse");
 	}
 
 	bool getLightImpulse(){
@@ -88,13 +84,13 @@ public class JoystickMovement : MonoBehaviour {
 				linearAccelleration = 0;
 			}
 		}
-		if (getThrust () != 0)// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
+		if (getThrust ())// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
 		{
 			//			transform.position += transform.up * speed * Time.deltaTime;
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
-				rigidBody.AddForce (getThrust()*transform.up * speed, ForceMode2D.Impulse);
+				rigidBody.AddForce (transform.up * speed, ForceMode2D.Impulse);
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
-				rigidBody.AddForce (-getThrust()*transform.up * speed);
+				rigidBody.AddForce (-transform.up * speed);
 			if (!i_am_moving) {
 				i_am_moving = true;
 				an.SetBool ("is_moving", true);
