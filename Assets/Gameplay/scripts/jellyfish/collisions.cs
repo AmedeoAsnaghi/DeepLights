@@ -22,7 +22,7 @@ public class collisions : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		Debug.Log (other.gameObject.tag);
 		if (other.gameObject.tag == "sphere") {
-			Destroy (other.gameObject);
+			//Destroy (other.gameObject);
 			gameManager.increaseLife(20);	
 		} 
 		//TODO: manage other collision
@@ -32,13 +32,14 @@ public class collisions : MonoBehaviour {
 		}
 
 		else if (other.gameObject.tag == "Predator") {
-			if (other.GetType() == typeof(BoxCollider2D))
+			if (other.GetType() == typeof(BoxCollider2D)){
 				gameManager.decreaseLife(20);
-			warning();
+				warning();
+			}
+
 		}
 		else if (other.gameObject.tag == "assassinAlga") {
-			if (other.GetType() == typeof(BoxCollider2D))
-				gameManager.decreaseLife(20);
+			gameManager.decreaseLife(20);
 			warning();
 		}
 
