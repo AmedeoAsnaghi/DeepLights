@@ -6,12 +6,14 @@ public class GameManager : MonoBehaviour {
 	public int currentJellyFishLife = 100;
 	private bool invincible = false;
 	private bool canGetLife = true;
+	private bool canIncreaseScore = false;
 	private GameObject jellyFish;
 	private Light[] lightVisible;
 	private Camera mainCamera;
 	private float oldSizeCamera;
 	private float lightRange;
 	private bool lightImpulse;
+	private Score sc;
 	
 	private Animator anImpulse;
 	private Animator anWarning;
@@ -24,6 +26,7 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		jellyFish = GameObject.FindWithTag ("Player");
+		sc = (GameObject.FindGameObjectWithTag ("Score")).GetComponent<Score> ()as Score;
 		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
 		lightRange = lightVisible[0].range;
 		mainCamera = Camera.main;
@@ -90,6 +93,14 @@ public class GameManager : MonoBehaviour {
 	public int showCurrentLife() {
 		return currentJellyFishLife;
 	}
+
+	public void showUpdatedScore() {
+		if (canIncreaseScore) {
+			sc.showUpdatedScore ();
+			canIncreaseScore = false;
+		}
+		StartCoroutine (WaitToUpdateScore (0.05f));
+	}
 	
 	public bool isDead() {
 		return currentJellyFishLife <= 0;
@@ -104,6 +115,12 @@ public class GameManager : MonoBehaviour {
 	IEnumerator WaitForLife(float delay){
 		yield return new WaitForSeconds(delay);
 		canGetLife = true;
+	}
+
+	IEnumerator WaitToUpdateScore(float delay){
+		yield return new WaitForSeconds(delay);
+		canIncreaseScore = true;
+		showUpdatedScore ();
 	}
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------

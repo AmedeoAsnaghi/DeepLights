@@ -23,7 +23,9 @@ public class collisions : MonoBehaviour {
 		Debug.Log (other.gameObject.tag);
 		if (other.gameObject.tag == "sphere") {
 			//Destroy (other.gameObject);
-			gameManager.increaseLife(20);	
+			gameManager.increaseLife(20);
+			gameManager.showUpdatedScore();
+
 		} 
 		//TODO: manage other collision
 		else if (other.gameObject.tag == "Pincers") {
