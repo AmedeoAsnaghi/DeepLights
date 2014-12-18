@@ -5,6 +5,7 @@ using System.Collections;
 public class GameManager : MonoBehaviour {
 	public int currentJellyFishLife = 100;
 	private bool invincible = false;
+	private bool canGetLife = true;
 	private GameObject jellyFish;
 	private Light[] lightVisible;
 	private Camera mainCamera;
@@ -68,16 +69,20 @@ public class GameManager : MonoBehaviour {
 			currentJellyFishLife = currentJellyFishLife - value;
 			anWarning.SetBool ("warning", true);
 			invincible = true;
-			StartCoroutine(WaitInvulnerability());
+			StartCoroutine(WaitInvulnerability(2));
 		}
 
 		return currentJellyFishLife;
 	}
 	
 	public int increaseLife(int value) {
-		currentJellyFishLife = currentJellyFishLife + value;
-		if (currentJellyFishLife > 100) {
-			currentJellyFishLife = 100;
+		if (canGetLife) {
+			currentJellyFishLife = currentJellyFishLife + value;
+			if (currentJellyFishLife > 100) {
+					currentJellyFishLife = 100;
+			}
+			canGetLife = false;
+			StartCoroutine (WaitForLife (0.5f));
 		}
 		return currentJellyFishLife;
 	}
@@ -90,10 +95,15 @@ public class GameManager : MonoBehaviour {
 		return currentJellyFishLife <= 0;
 	}
 
-	IEnumerator WaitInvulnerability(){
-		yield return new WaitForSeconds(2);
+	IEnumerator WaitInvulnerability(float delay){
+		yield return new WaitForSeconds(delay);
 		anWarning.SetBool ("warning", false);
 		invincible = false;
+	}
+
+	IEnumerator WaitForLife(float delay){
+		yield return new WaitForSeconds(delay);
+		canGetLife = true;
 	}
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
