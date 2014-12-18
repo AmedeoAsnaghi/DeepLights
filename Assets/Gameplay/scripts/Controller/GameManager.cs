@@ -13,6 +13,8 @@ public class GameManager : MonoBehaviour {
 	private bool lightImpulse;
 	
 	private Animator anImpulse;
+	private Animator anWarning;
+
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -27,7 +29,7 @@ public class GameManager : MonoBehaviour {
 		lightImpulse = false;
 		oldSizeCamera = mainCamera.orthographicSize;
 		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
-
+		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
 	}
 	
 	// Update is called once per frame
@@ -57,8 +59,6 @@ public class GameManager : MonoBehaviour {
 			case utils.LIGHT_IMPULSE:
 				doLightImpulse();
 				break;
-
-
 		}
 
 	}
@@ -66,6 +66,7 @@ public class GameManager : MonoBehaviour {
 	public int decreaseLife(int value) {
 		if (!invincible) { 
 			currentJellyFishLife = currentJellyFishLife - value;
+			anWarning.SetBool ("warning", true);
 			invincible = true;
 			StartCoroutine(WaitInvulnerability());
 		}
@@ -91,6 +92,7 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator WaitInvulnerability(){
 		yield return new WaitForSeconds(2);
+		anWarning.SetBool ("warning", false);
 		invincible = false;
 	}
 
