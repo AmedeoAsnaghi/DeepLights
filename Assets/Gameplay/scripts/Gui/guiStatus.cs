@@ -4,18 +4,19 @@ using System.Collections;
 public class guiStatus : MonoBehaviour {
 
 	private GameManager gameManager;
+
 	private int count;
-	//private int healthCount;
-	private float health;
-	private float oldHealth;
+	private int health;
+	private int oldHealth;
 	private Queue increaseLife;	
 	private bool increase;
 	private bool running;
-	//private bool increaseLife;
 	private int currentHealthFrame;
 	private object[] objects;
+
 	public float x = 0;
 	public float y = 0.9f;
+
 	GUITexture gt;
 	Texture[] decreaseLifeTextures;
 	Texture[] increaseLifeTextures;
@@ -46,15 +47,16 @@ public class guiStatus : MonoBehaviour {
 			this.increaseLifeTextures[i] = (Texture)this.objects[i];  
 		}   
 
-		gt.texture = this.decreaseLifeTextures[0];
+		currentHealthFrame = (100 - health) * 48 / 20;
+		gt.texture = this.decreaseLifeTextures[currentHealthFrame];
 		gt.pixelInset = new Rect(-70, -200, 400,400);
-		currentHealthFrame = 0;
 		running = false;
 	}
 
 
 	void Update () {
 		float deltaHealth = 0;
+
 		health = gameManager.showCurrentLife();
 
 		if (health != oldHealth) {

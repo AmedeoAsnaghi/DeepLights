@@ -44,6 +44,10 @@ public class collisions : MonoBehaviour {
 			gameManager.decreaseLife(20);
 			//warning();
 		}
+		else if (other.gameObject.tag == "nextLevel") {
+			gameManager.changeLevel();
+			//warning();
+		}
 
 	}
 

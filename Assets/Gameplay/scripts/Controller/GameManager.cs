@@ -13,11 +13,13 @@ public class GameManager : MonoBehaviour {
 	private float oldSizeCamera;
 	private float lightRange;
 	private bool lightImpulse;
+	private bool lightImpulseCamera;
 	private Score sc;
+	private int level;
+	private bool canChangeLevel;
 	
 	private Animator anImpulse;
 	private Animator anWarning;
-
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -25,36 +27,16 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		jellyFish = GameObject.FindWithTag ("Player");
-		sc = (GameObject.FindGameObjectWithTag ("Score")).GetComponent<Score> ()as Score;
-		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
-		lightRange = lightVisible[0].range;
-		mainCamera = Camera.main;
-		lightImpulse = false;
-		oldSizeCamera = mainCamera.orthographicSize;
-		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
-		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
+		this.setManager ();
+		level = 1;
 	}
 	
 	// Update is called once per frame
 	void Update () {
-		if (lightImpulse) {
-			if(mainCamera.orthographicSize < 10f){
-				mainCamera.orthographicSize+=0.1f;
-				lightVisible[0].range += 0.1f;
-			}
-			if (lightVisible[0].range < lightRange + 10f){
-				lightVisible[0].range+=0.1f;
-			}
+		if (mainCamera == null) {
+			this.setManager();		
 		}
-		else{
-			if (mainCamera.orthographicSize > oldSizeCamera){
-				mainCamera.orthographicSize-=0.1f;
-			}
-			if (lightVisible[0].range > lightRange){
-				lightVisible[0].range -= 0.01f;
-			}
-		}
+		checkForLightImpulse ();
 	}
 
 	public void usePower(int type){
@@ -123,21 +105,51 @@ public class GameManager : MonoBehaviour {
 		showUpdatedScore ();
 	}
 
+	//-----------------CHECK POWER USAGE AND ACT------------------
+	void checkForLightImpulse ()
+	{	
+		if (lightImpulseCamera) {
+			if (mainCamera.orthographicSize < 10f) {
+				mainCamera.orthographicSize += 0.1f;
+				lightVisible [0].range += 0.1f;
+			}
+			if (lightVisible [0].range < lightRange + 10f) {
+				lightVisible [0].range += 0.1f;
+			}
+		}
+		else {
+			if (mainCamera.orthographicSize > oldSizeCamera) {
+				mainCamera.orthographicSize -= 0.1f;
+			}
+			if (lightVisible [0].range > lightRange) {
+				lightVisible [0].range -= 0.01f;
+			}
+		}
+	}
+
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
 		if (!lightImpulse) {
+			lightImpulseCamera = true;
 			lightImpulse = true;
 			anImpulse.SetBool ("impulsePower", true);
+			StartCoroutine (WaitLightRestart(10f));
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
+
 		}
 
 	}
 
 	IEnumerator WaitLightImpulse(float delay, float oldSizeCamera){
 		yield return new WaitForSeconds(delay);
-		lightImpulse = false;
 		anImpulse.SetBool ("impulsePower", false);
+		lightImpulseCamera = false;
 		//returnLightImpulse(oldSizeCamera);
+	}
+
+	IEnumerator WaitLightRestart(float delay){
+		yield return new WaitForSeconds(delay);
+		lightImpulse = false;
 	}
 
 	public void returnLightImpulse(float oldSizeCamera){
@@ -145,13 +157,49 @@ public class GameManager : MonoBehaviour {
 			mainCamera.orthographicSize -= Mathf.Log10(mainCamera.orthographicSize)*0.001f;	
 		}
 		lightVisible[0].range -= 10f;
-		lightImpulse = false;
 
 	}
 	public bool CanPulse(){
-		return !lightImpulse;
+		return !lightImpulseCamera;
 	}
+
+	public bool CanDoLightImpulse(){
+		return !lightImpulse;
+		}
 	//--------------------------------------- END SUPER POWERS ---------------------------------------
 
+
+	//--------------------------------------- CHANGE LEVEL -------------------------------------------
+
+	public void changeLevel() {
+		if (canChangeLevel) {
+			mainCamera = null;
+			canChangeLevel = false;
+			level += level;
+			Application.LoadLevel (level);
+			StartCoroutine (WaitLevel(10f));
+		}
+	}
+
+	IEnumerator WaitLevel(float delay){
+		yield return new WaitForSeconds(delay);
+		canChangeLevel = false;
+	}
+
+
+	//--------------------------------------- END CHANGE LEVEL ---------------------------------------
+	public void setManager() {
+		canChangeLevel = true;
+		jellyFish = GameObject.FindWithTag ("Player");
+		sc = (GameObject.FindGameObjectWithTag ("Score")).GetComponent<Score> ()as Score;
+		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
+		lightRange = lightVisible[0].range;
+		mainCamera = Camera.main;
+		lightImpulse = false;
+		lightImpulseCamera = false;
+		oldSizeCamera = mainCamera.orthographicSize;
+		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
+		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
+	}
 }
 	
