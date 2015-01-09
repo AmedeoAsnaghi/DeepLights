@@ -1,14 +1,15 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug" PreferredExecutionTarget="MonoDevelop.Default" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Gameplay\Scripts\Controller\GameManager.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Assets\Menu\Scripts\PauseMenu.cs">
     <Files>
-      <File FileName="Assets\Gameplay\Scripts\Controller\GameManager.cs" Line="34" Column="36" />
-      <File FileName="Assets\Menu\Scripts\ClickToLoadAsync.cs" Line="14" Column="32" />
-      <File FileName="Assets\Gameplay\Scripts\Gui\guiStatus.cs" Line="26" Column="72" />
+      <File FileName="Assets\Menu\Scripts\PauseMenu.cs" Line="15" Column="59" />
+      <File FileName="Assets\Gameplay\Scripts\Controller\GameManager.cs" Line="1" Column="1" />
+      <File FileName="Assets\Menu\Scripts\ClickToLoadAsync.cs" Line="1" Column="1" />
+      <File FileName="Assets\Gameplay\Scripts\Gui\guiStatus.cs" Line="31" Column="42" />
       <File FileName="Assets\Gameplay\Scripts\Gui\Score.cs" Line="1" Column="1" />
       <File FileName="Assets\Gameplay\Scripts\Gui\GuiLightPulse.cs" Line="1" Column="1" />
       <File FileName="Assets\Gameplay\Scripts\Light\lightPulse.cs" Line="1" Column="1" />
-      <File FileName="Assets\Gameplay\Scripts\Jellyfish\collisions.cs" Line="48" Column="30" />
+      <File FileName="Assets\Gameplay\Scripts\Jellyfish\collisions.cs" Line="1" Column="1" />
     </Files>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
