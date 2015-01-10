@@ -39,6 +39,10 @@
 	bool getLightImpulse(){
 		return (Input.GetKeyDown(KeyCode.Q));
 	}
+
+	bool getBarrier(){
+		return (Input.GetKeyDown (KeyCode.E));
+	}
 	#endregion
 
 	// Use this for initialization
@@ -109,6 +113,9 @@
 		}
 		if (getLightImpulse ()) {
 			gameManager.doLightImpulse ();
+		}
+		if (getBarrier ()) {
+			gameManager.doBarrier();		
 		}
 		if (/*canShoot &&*/getFire ()) {
 			//GameObject missile = Instantiate(prefabMissile, transform.position + transform.up * 0.45f, transform.rotation) as GameObject;

@@ -31,6 +31,9 @@ public class JoystickMovement : MonoBehaviour {
 	bool getLightImpulse(){
 		return Input.GetButtonDown("LightImpulse");
 	}
+	bool getBarrier(){
+		return Input.GetButtonDown ("Barrier");
+	}
 	#endregion
 	
 	// Use this for initialization
@@ -105,6 +108,8 @@ public class JoystickMovement : MonoBehaviour {
 		if (getLightImpulse ()) {
 			gameManager.doLightImpulse ();
 		}
-
+		if (getBarrier ()) {
+			gameManager.doBarrier();
+		}
 	}
 }
