@@ -22,27 +22,26 @@ public class collisions : MonoBehaviour {
 	void OnTriggerEnter2D(Collider2D other){
 		Debug.Log (other.gameObject.tag);
 		if (other.gameObject.tag == "sphere") {
-			//Destroy (other.gameObject);
-			gameManager.increaseLife(20);
-			gameManager.showUpdatedScore();
+						//Destroy (other.gameObject);
+						gameManager.increaseLife (20);
+						gameManager.showUpdatedScore ();
 
-		} 
+				} 
 		//TODO: manage other collision
 		else if (other.gameObject.tag == "Pincers") {
-			gameManager.decreaseLife(20);
-			//warning();
-		}
+						gameManager.decreaseLife (20);
+						//warning();
+				} else if (other.gameObject.tag == "Predator") {
+						if (other.GetType () == typeof(BoxCollider2D)) {
+								gameManager.decreaseLife (20);
+								//warning();
+						}
 
-		else if (other.gameObject.tag == "Predator") {
-			if (other.GetType() == typeof(BoxCollider2D)){
-				gameManager.decreaseLife(20);
-				//warning();
-			}
-
-		}
-		else if (other.gameObject.tag == "assassinAlga") {
-			gameManager.decreaseLife(20);
-			//warning();
+				} else if (other.gameObject.tag == "assassinAlga") {
+						gameManager.decreaseLife (20);
+						//warning();
+				} else if (other.gameObject.tag == "melma") {
+						gameManager.decreaseLife(20);		
 		}
 		else if (other.gameObject.tag == "nextLevel") {
 			gameManager.changeLevel();
