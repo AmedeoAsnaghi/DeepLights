@@ -1,15 +1,16 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class Score : MonoBehaviour {
-	private GUIText gt;
+	private Text gt;
 	private GameObject[] spheres;
 	private int totalSpheres;
 	private int currentSpheres;
 
 	// Use this for initialization
 	void Start () {
-		gt = gameObject.GetComponent<GUIText> () as GUIText;
+		gt = gameObject.GetComponent<Text> () as Text;
 		spheres = GameObject.FindGameObjectsWithTag ("sphere");
 		totalSpheres = spheres.Length;
 		currentSpheres = 0;

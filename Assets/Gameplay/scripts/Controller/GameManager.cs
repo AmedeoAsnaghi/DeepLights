@@ -1,6 +1,7 @@
 ﻿
 using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour {
 	public int currentJellyFishLife = 100;
@@ -20,6 +21,7 @@ public class GameManager : MonoBehaviour {
 	
 	private Animator anImpulse;
 	private Animator anWarning;
+	private Animator gameOverAnimator;
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -27,16 +29,21 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		this.setManager ();
 		level = 1;
+		this.setManager ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (level == 0) {
+			DestroyImmediate(gameObject);		
+		}
 		if (mainCamera == null) {
 			this.setManager();		
 		}
 		checkForLightImpulse ();
+
+
 	}
 
 	public void usePower(int type){
@@ -53,6 +60,12 @@ public class GameManager : MonoBehaviour {
 		if (!invincible) { 
 			currentJellyFishLife = currentJellyFishLife - value;
 			anWarning.SetBool ("warning", true);
+			if (isDead()) {
+				Time.timeScale = 0;
+				(GameObject.FindGameObjectWithTag ("buttonRestart")).GetComponent <Button> ().interactable = true;
+				gameOverAnimator.SetTrigger("GameOver");
+
+			}
 			invincible = true;
 			StartCoroutine(WaitInvulnerability(2));
 		}
@@ -170,6 +183,16 @@ public class GameManager : MonoBehaviour {
 
 
 	//--------------------------------------- CHANGE LEVEL -------------------------------------------
+	public void restartLevel() {
+		resetStatus();
+		Application.LoadLevel (level);
+	}
+
+	public void loadMenu() {
+		level = 0;
+		Application.LoadLevel (level);
+
+	}
 
 	public void changeLevel() {
 		if (canChangeLevel) {
@@ -186,9 +209,15 @@ public class GameManager : MonoBehaviour {
 		canChangeLevel = false;
 	}
 
+	public void resetStatus(){
+		currentJellyFishLife = 100;
+	}
 
 	//--------------------------------------- END CHANGE LEVEL ---------------------------------------
 	public void setManager() {
+		if (level == 0) {
+			DestroyImmediate(gameObject);
+				}
 		canChangeLevel = true;
 		jellyFish = GameObject.FindWithTag ("Player");
 		sc = (GameObject.FindGameObjectWithTag ("Score")).GetComponent<Score> ()as Score;
@@ -200,6 +229,7 @@ public class GameManager : MonoBehaviour {
 		oldSizeCamera = mainCamera.orthographicSize;
 		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
 		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
+		gameOverAnimator = (GameObject.Find ("GUICanvas")).GetComponent<Animator>() as Animator;
 	}
 }
 	

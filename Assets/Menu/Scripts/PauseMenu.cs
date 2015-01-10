@@ -38,14 +38,18 @@ public class PauseMenu : MonoBehaviour {
 		
 		if(showGUI == true)
 		{
-
 			pauseGUI.guiTexture.enabled = true;  
 
 		}
 		
 		else
 		{
-			pauseGUI.guiTexture.enabled = false;  
+			if (pauseGUI!= null) {
+				pauseGUI.guiTexture.enabled = false; 
+			}
+			else {
+				pauseGUI = GameObject.Find ("PausedGUI");
+			}
 		}
 	}
 }
