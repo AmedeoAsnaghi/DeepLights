@@ -59,40 +59,6 @@
 	void Update () {
 		var currentState  = an.GetCurrentAnimatorStateInfo(0);	
 
-		if (getLeft () && (currentState.nameHash != Animator.StringToHash ("Base Layer.Charging"))) {
-			//transform.Rotate(Vector3.forward * rotationSpeed * linearAccelleration * Time.deltaTime);
-			rigidBody.angularVelocity = rotationSpeed * linearAccelleration;
-			if (linearAccelleration < 1)
-				linearAccelleration += accellerationStep;
-			if (!turning_left) {
-				turning_left = true;
-				an.SetBool ("turning_left", true);
-			}
-		}
-		else {
-			if (turning_left) {
-				turning_left = false;
-				an.SetBool ("turning_left", false);
-				linearAccelleration = 0;
-			}
-		}
-		if (getRight ()) {
-			//transform.Rotate (Vector3.forward * (-rotationSpeed) * linearAccelleration * Time.deltaTime);
-			rigidBody.angularVelocity = -rotationSpeed * linearAccelleration;
-			if (linearAccelleration < 1)
-				linearAccelleration += accellerationStep;
-			if (!turning_right) {
-				turning_right = true;
-				an.SetBool ("turning_right", true);
-			}
-		}
-		else {
-			if (turning_right) {
-				turning_right = false;
-				an.SetBool ("turning_right", false);
-				linearAccelleration = 0;
-			}
-		}
 		if (getThrust ())// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
 		{
 			//			transform.position += transform.up * speed * Time.deltaTime;
@@ -105,22 +71,65 @@
 				an.SetBool ("is_moving", true);
 			}
 		}
-		else {
+		else{
 			if (i_am_moving) {
 				i_am_moving = false;
 				an.SetBool ("is_moving", false);
 			}
+			if(getLeft() && getRight())
+			{
+				linearAccelleration = 0;
+				an.SetBool("turning_left",false);
+				an.SetBool("turning_right",false);
+			}
+			else{
+			
+				if (getLeft () && !getRight() /*&& (currentState.nameHash != Animator.StringToHash ("Base Layer.Charging"))*/) {
+					//transform.Rotate(Vector3.forward * rotationSpeed * linearAccelleration * Time.deltaTime);
+					rigidBody.angularVelocity = rotationSpeed * linearAccelleration;
+					if (linearAccelleration < 1)
+						linearAccelleration += accellerationStep;
+					if (!turning_left) {
+						turning_left = true;
+						an.SetBool ("turning_left", true);
+					}
+				}
+				else {
+					if (turning_left) {
+						turning_left = false;
+						an.SetBool ("turning_left", false);
+						linearAccelleration = 0;
+					}
+					if (getRight () && !getLeft()) {
+						//transform.Rotate (Vector3.forward * (-rotationSpeed) * linearAccelleration * Time.deltaTime);
+						rigidBody.angularVelocity = -rotationSpeed * linearAccelleration;
+						if (linearAccelleration < 1)
+							linearAccelleration += accellerationStep;
+						if (!turning_right) {
+							turning_right = true;
+							an.SetBool ("turning_right", true);
+						}
+					}
+					else {
+						if (turning_right) {
+							turning_right = false;
+							an.SetBool ("turning_right", false);
+							linearAccelleration = 0;
+						}
+					}
+				}
+			}
 		}
+
+	
+
+
+		//-------POWERS-------
 		if (getLightImpulse ()) {
 			gameManager.doLightImpulse ();
 		}
 		if (getBarrier ()) {
 			gameManager.doBarrier();		
-		}
-		if (/*canShoot &&*/getFire ()) {
-			//GameObject missile = Instantiate(prefabMissile, transform.position + transform.up * 0.45f, transform.rotation) as GameObject;
-			//canShoot = false;
-			//StartCoroutine(WaitToShoot());
 		}
 	}
 }
