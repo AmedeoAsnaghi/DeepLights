@@ -15,13 +15,17 @@ public class GameManager : MonoBehaviour {
 	private float lightRange;
 	private bool lightImpulse;
 	private bool lightImpulseCamera;
+	private bool barrier;
 	private Score sc;
 	private int level;
 	private bool canChangeLevel;
 	
 	private Animator anImpulse;
 	private Animator anWarning;
+	private Animator anBarrier;
 	private Animator gameOverAnimator;
+
+	private CircleCollider2D barrierCollider;
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -150,7 +154,28 @@ public class GameManager : MonoBehaviour {
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
 
 		}
+	}
 
+	public void doBarrier(){
+		if (!barrier) {
+			barrier = true;
+			invincible = true;
+			anBarrier.SetBool("barrierPower", true);
+			barrierCollider.radius = 2f;
+			StartCoroutine(WaitBarrierRestart (10f));
+			StartCoroutine(WaitBarrierColliderReset(3f));
+		}
+	}
+	
+	IEnumerator WaitBarrierColliderReset(float delay){
+		yield return new WaitForSeconds (delay);
+		barrierCollider.radius = 0;
+	}
+	IEnumerator WaitBarrierRestart(float delay){
+		yield return new WaitForSeconds (delay);
+		barrier = false;
+		invincible = false;
+		anBarrier.SetBool ("barrierPower", false);
 	}
 
 	IEnumerator WaitLightImpulse(float delay, float oldSizeCamera){
@@ -225,11 +250,14 @@ public class GameManager : MonoBehaviour {
 		lightRange = lightVisible[0].range;
 		mainCamera = Camera.main;
 		lightImpulse = false;
+		barrier = false;
 		lightImpulseCamera = false;
 		oldSizeCamera = mainCamera.orthographicSize;
 		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
 		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
+		anBarrier = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<Animator> () as Animator;
 		gameOverAnimator = (GameObject.Find ("GUICanvas")).GetComponent<Animator>() as Animator;
+		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
 	}
 }
 	

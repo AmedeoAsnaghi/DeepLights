@@ -81,6 +81,7 @@
 				linearAccelleration = 0;
 				an.SetBool("turning_left",false);
 				an.SetBool("turning_right",false);
+				rigidBody.angularVelocity = 0;
 			}
 			else{
 			
