@@ -9,6 +9,8 @@ public class GameManager : MonoBehaviour {
 	private bool canIncreaseScore = false;
 	private GameObject jellyFish;
 	private Light[] lightVisible;
+	private lightPulse jellyfishLight;
+	private ColorManager jellyfishColorManager;
 	private Camera mainCamera;
 	private float oldSizeCamera;
 	private float lightRange;
@@ -23,6 +25,11 @@ public class GameManager : MonoBehaviour {
 	private Animator anWarning;
 	private Animator anBarrier;
 	private Animator gameOverAnimator;
+
+	public Color red;
+	public  Color lightRed;
+	public  Color blue;
+	public  Color lightBlue;
 
 	private CircleCollider2D barrierCollider;
 
@@ -66,10 +73,12 @@ public class GameManager : MonoBehaviour {
 			if (isDead()) {
 				Time.timeScale = 0;
 				(GameObject.FindGameObjectWithTag ("buttonRestart")).GetComponent <Button> ().interactable = true;
+				(GameObject.FindGameObjectWithTag ("buttonMenu2")).GetComponent <Button> ().interactable = true;
 				gameOverAnimator.SetTrigger("GameOver");
 
 			}
 			invincible = true;
+			jellyfishLight.updateJellyfishLight();
 			StartCoroutine(WaitInvulnerability(2));
 		}
 
@@ -83,6 +92,7 @@ public class GameManager : MonoBehaviour {
 					currentJellyFishLife = 100;
 			}
 			canGetLife = false;
+			jellyfishLight.updateJellyfishLight();
 			StartCoroutine (WaitForLife (0.5f));
 		}
 		return currentJellyFishLife;
@@ -148,10 +158,15 @@ public class GameManager : MonoBehaviour {
 		if (!lightImpulse) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
+
+			//update color
+			jellyfishLight.updateJellyfishLightColor(lightRed);
+			jellyfishColorManager.updateColorJellyfish(red);
+
 			anImpulse.SetBool ("impulsePower", true);
+
 			StartCoroutine (WaitLightRestart(10f));
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
-
 		}
 	}
 
@@ -159,8 +174,14 @@ public class GameManager : MonoBehaviour {
 		if (!barrier) {
 			barrier = true;
 			invincible = true;
+
+			//update color
+			jellyfishLight.updateJellyfishLightColor(lightBlue);
+			jellyfishColorManager.updateColorJellyfish(blue);
+
 			anBarrier.SetBool("barrierPower", true);
 			barrierCollider.radius = 2f;
+
 			StartCoroutine(WaitBarrierRestart (10f));
 			StartCoroutine(WaitBarrierColliderReset(3f));
 		}
@@ -222,7 +243,7 @@ public class GameManager : MonoBehaviour {
 		if (canChangeLevel) {
 			mainCamera = null;
 			canChangeLevel = false;
-			level += level;
+			level += 1;
 			Application.LoadLevel (level);
 			StartCoroutine (WaitLevel(10f));
 		}
@@ -230,7 +251,7 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator WaitLevel(float delay){
 		yield return new WaitForSeconds(delay);
-		canChangeLevel = false;
+		canChangeLevel = true;
 	}
 
 	public void resetStatus(){
@@ -247,6 +268,8 @@ public class GameManager : MonoBehaviour {
 		sc = (GameObject.FindGameObjectWithTag ("Score")).GetComponent<Score> ()as Score;
 		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
 		lightRange = lightVisible[0].range;
+		jellyfishLight = jellyFish.GetComponentInChildren<lightPulse> () as lightPulse;
+		jellyfishColorManager = jellyFish.GetComponent<ColorManager> () as ColorManager;
 		mainCamera = Camera.main;
 		lightImpulse = false;
 		barrier = false;
