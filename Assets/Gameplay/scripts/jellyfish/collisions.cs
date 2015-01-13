@@ -58,7 +58,10 @@ public class collisions : MonoBehaviour {
 		yield return new WaitForSeconds (0.5f);
 		if (go != null) {
 			CircleCollider2D cc = go.GetComponent<CircleCollider2D>() as CircleCollider2D;
+			CircleCollider2D cc1 = GameObject.FindGameObjectWithTag("chainCollider").GetComponent<CircleCollider2D>() as CircleCollider2D;
+			Debug.Log (cc1.radius);
 			cc.radius += 1;
+			cc1.radius += 2.3f;
 			gameManager.decreaseLife(20);
 			StartCoroutine (DestroyBomb (go));
 		}
