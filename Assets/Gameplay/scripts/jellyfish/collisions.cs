@@ -43,6 +43,9 @@ public class collisions : MonoBehaviour {
 			an.SetTrigger("bombTouched");
 			StartCoroutine(BombExplosionEffect(other.gameObject));
 		}
+		else if (other.gameObject.tag == "nextLevel") {
+			gameManager.changeLevel();
+		} 
 
 	}
 
