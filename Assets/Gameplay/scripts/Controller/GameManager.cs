@@ -168,13 +168,13 @@ public class GameManager : MonoBehaviour {
 	
 	IEnumerator WaitBarrierColliderReset(float delay){
 		yield return new WaitForSeconds (delay);
+		invincible = false;
 		barrierCollider.radius = 0;
+		anBarrier.SetBool ("barrierPower", false);
 	}
 	IEnumerator WaitBarrierRestart(float delay){
 		yield return new WaitForSeconds (delay);
 		barrier = false;
-		invincible = false;
-		anBarrier.SetBool ("barrierPower", false);
 	}
 
 	IEnumerator WaitLightImpulse(float delay, float oldSizeCamera){

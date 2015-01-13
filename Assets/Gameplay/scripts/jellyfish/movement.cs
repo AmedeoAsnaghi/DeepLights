@@ -76,23 +76,25 @@
 				i_am_moving = false;
 				an.SetBool ("is_moving", false);
 			}
-			if(getLeft() && getRight())
-			{
-				linearAccelleration = 0;
-				an.SetBool("turning_left",false);
-				an.SetBool("turning_right",false);
-				rigidBody.angularVelocity = 0;
-			}
-			else{
-			
-				if (getLeft () && !getRight() /*&& (currentState.nameHash != Animator.StringToHash ("Base Layer.Charging"))*/) {
+		}
+		if(getLeft() && getRight())
+		{
+			linearAccelleration = 0;
+			an.SetBool("turning_left",false);
+			an.SetBool("turning_right",false);
+			rigidBody.angularVelocity = 0;
+		}
+		else{
+			if (getLeft () /*&& (currentState.nameHash != Animator.StringToHash ("Base Layer.Charging"))*/) {
 					//transform.Rotate(Vector3.forward * rotationSpeed * linearAccelleration * Time.deltaTime);
 					rigidBody.angularVelocity = rotationSpeed * linearAccelleration;
 					if (linearAccelleration < 1)
 						linearAccelleration += accellerationStep;
 					if (!turning_left) {
 						turning_left = true;
-						an.SetBool ("turning_left", true);
+						if(!getThrust()){
+							an.SetBool ("turning_left", true);
+						}
 					}
 				}
 				else {
@@ -101,14 +103,16 @@
 						an.SetBool ("turning_left", false);
 						linearAccelleration = 0;
 					}
-					if (getRight () && !getLeft()) {
+					if (getRight ()) {
 						//transform.Rotate (Vector3.forward * (-rotationSpeed) * linearAccelleration * Time.deltaTime);
 						rigidBody.angularVelocity = -rotationSpeed * linearAccelleration;
 						if (linearAccelleration < 1)
 							linearAccelleration += accellerationStep;
 						if (!turning_right) {
 							turning_right = true;
-							an.SetBool ("turning_right", true);
+							if(!getThrust()){
+								an.SetBool ("turning_right", true);
+							}
 						}
 					}
 					else {
@@ -120,10 +124,9 @@
 					}
 				}
 			}
-		}
+
 
 	
-
 
 		//-------POWERS-------
 		if (getLightImpulse ()) {
