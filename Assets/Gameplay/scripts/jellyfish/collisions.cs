@@ -19,7 +19,15 @@ public class collisions : MonoBehaviour {
 
 	void OnTriggerEnter2D(Collider2D other){
 		Debug.Log (other.gameObject.tag);
-		if (other.gameObject.tag == "sphere") {
+		if (other.gameObject.tag == "RedSphere") {
+			gameManager.increaseLife (20);
+			gameManager.showUpdatedScore ();
+		} 
+		else if (other.gameObject.tag == "BlueSphere") {
+			gameManager.increaseLife (20);
+			gameManager.showUpdatedScore ();
+		} 
+		else if (other.gameObject.tag == "YellowSphere") {
 			gameManager.increaseLife (20);
 			gameManager.showUpdatedScore ();
 		} 

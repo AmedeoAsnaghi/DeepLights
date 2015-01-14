@@ -17,7 +17,9 @@ public class GameManager : MonoBehaviour {
 	private bool lightImpulse;
 	private bool lightImpulseCamera;
 	private bool barrier;
-	private Score sc;
+	private BlueScore bScore;
+	private RedScore rScore;
+	private YellowScore yScore;
 	private int level;
 	private bool canChangeLevel;
 	
@@ -104,7 +106,9 @@ public class GameManager : MonoBehaviour {
 
 	public void showUpdatedScore() {
 		if (canIncreaseScore) {
-			sc.showUpdatedScore ();
+			bScore.showUpdatedScore ();
+			rScore.showUpdatedScore ();
+			yScore.showUpdatedScore ();
 			canIncreaseScore = false;
 		}
 		StartCoroutine (WaitToUpdateScore (0.05f));
@@ -265,7 +269,9 @@ public class GameManager : MonoBehaviour {
 				}
 		canChangeLevel = true;
 		jellyFish = GameObject.FindWithTag ("Player");
-		sc = (GameObject.FindGameObjectWithTag ("Score")).GetComponent<Score> ()as Score;
+		rScore = (GameObject.FindGameObjectWithTag ("RedScore")).GetComponent<RedScore> ()as RedScore;
+		bScore = (GameObject.FindGameObjectWithTag ("BlueScore")).GetComponent<BlueScore> ()as BlueScore;
+		yScore = (GameObject.FindGameObjectWithTag ("YellowScore")).GetComponent<YellowScore> ()as YellowScore;
 		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
 		lightRange = lightVisible[0].range;
 		jellyfishLight = jellyFish.GetComponentInChildren<lightPulse> () as lightPulse;

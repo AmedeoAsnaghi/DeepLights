@@ -47,9 +47,9 @@ public class guiStatus : MonoBehaviour {
 			this.increaseLifeTextures[i] = (Texture)this.objects[i];  
 		}   
 
-		currentHealthFrame = (100 - health) * 48 / 20;
+		currentHealthFrame = (100 - health) * 12 / 20;
 		gt.texture = this.decreaseLifeTextures[currentHealthFrame];
-		gt.pixelInset = new Rect(-70, -200, 400,400);
+		gt.pixelInset = new Rect(10, -30, 260,60);
 		running = false;
 	}
 
@@ -82,19 +82,19 @@ public class guiStatus : MonoBehaviour {
 				StartCoroutine (DecreaseLife (0.01f, deltaHealth));
 			}
 		}
-		gt.pixelInset = new Rect(-70, -200, 400,400);
+		gt.pixelInset = new Rect(10, -30, 260,60);
 	}
 
 	IEnumerator DecreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
 		int i = currentHealthFrame;
 		if (currentHealthFrame<this.decreaseLifeTextures.Length)
-			gt.texture = this.decreaseLifeTextures[i];
+			gt.texture = this.decreaseLifeTextures[i+1];
 		i++;
 		count ++;
 		currentHealthFrame = i;
 
-		if (48 == count) {
+		if (11 == count) {
 			running = false;	
 			i = 0;
 		}
@@ -102,14 +102,14 @@ public class guiStatus : MonoBehaviour {
 
 	IEnumerator IncreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
-		int i = 193 - currentHealthFrame;
+		int i = 60 - currentHealthFrame;
 		if (currentHealthFrame<this.decreaseLifeTextures.Length)
-			gt.texture = this.increaseLifeTextures[i];
+			gt.texture = this.increaseLifeTextures[i+1];
 		i++;
 		count++;
-		currentHealthFrame = 193 - i;
+		currentHealthFrame = 60 - i;
 
-		if (48 == count) {
+		if (11 == count) {
 			running = false;	
 			i = 0;
 		}
