@@ -22,7 +22,12 @@ public class GameManager : MonoBehaviour {
 	private YellowScore yScore;
 	private int level;
 	private bool canChangeLevel;
-	
+	private bool canUpdateImage;
+
+	private int totalBlueEnergyCollected;
+	private int totalYellowEnergyCollected;
+	private int totalRedEnergyCollected;
+
 	private Animator anImpulse;
 	private Animator anWarning;
 	private Animator anBarrier;
@@ -30,6 +35,10 @@ public class GameManager : MonoBehaviour {
 	private Animator anRedTimer;
 	private Animator anBlueTimer;
 	private Animator anYellowTimer;
+
+	Texture2D[] activationRedPower;
+	Texture2D[] activationBluePower;
+	Texture2D[] activationYellowPower;
 
 	public Color red;
 	public  Color lightRed;
@@ -45,6 +54,34 @@ public class GameManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		level = 1;
+		totalBlueEnergyCollected = 0;
+		totalRedEnergyCollected = 0;
+		totalYellowEnergyCollected = 0;
+
+		object[] objects = Resources.LoadAll("BluePowerActivation",typeof(Texture2D));
+		Debug.Log (objects[0]);
+		this.activationBluePower = new Texture2D[objects.Length];
+		for(int i=0; i < objects.Length;i++)  
+		{  
+			this.activationBluePower[i] = (Texture2D)objects[i];
+		}
+
+		objects = Resources.LoadAll("RedPowerActivation", typeof(Texture2D));
+		Debug.Log (objects[0]);
+		this.activationRedPower = new Texture2D[objects.Length];
+		for(int i=0; i < objects.Length;i++)  
+		{  
+			this.activationRedPower[i] = (Texture2D)objects[i];  
+		}
+
+		objects = Resources.LoadAll("YellowPowerActivation", typeof(Texture2D));
+		Debug.Log (objects[0]);
+		this.activationYellowPower = new Texture2D[objects.Length];
+		for(int i=0; i < objects.Length;i++)  
+		{  
+			this.activationYellowPower[i] = (Texture2D)objects[i];  
+		}
+
 		this.setManager ();
 	}
 	
@@ -79,6 +116,8 @@ public class GameManager : MonoBehaviour {
 				Time.timeScale = 0;
 				(GameObject.FindGameObjectWithTag ("buttonRestart")).GetComponent <Button> ().interactable = true;
 				(GameObject.FindGameObjectWithTag ("buttonMenu2")).GetComponent <Button> ().interactable = true;
+				jellyfishColorManager.updateColorJellyfish(Color.black);
+				(jellyFish.GetComponent<movement>() as movement).enabled = false;
 				gameOverAnimator.SetTrigger("GameOver");
 
 			}
@@ -105,6 +144,40 @@ public class GameManager : MonoBehaviour {
 	
 	public int showCurrentLife() {
 		return currentJellyFishLife;
+	}
+
+	public void blueSphereCatched(){
+		if (canUpdateImage) {
+			Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
+			Texture2D texture = activationBluePower [totalBlueEnergyCollected];
+			blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			totalBlueEnergyCollected += 1;
+			canUpdateImage = false;
+			StartCoroutine(WaitUpdateImage(0.05f));
+		}
+		Debug.Log (totalBlueEnergyCollected);
+	}
+
+	public void yellowSphereCatched() {
+		if (canUpdateImage) {
+			Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
+			Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
+			yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			totalYellowEnergyCollected += 1;
+			canUpdateImage = false;
+			StartCoroutine(WaitUpdateImage(0.05f));
+		}
+	}
+
+	public void redSphereCatched(){
+		if (canUpdateImage) {
+			Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
+			Texture2D texture = activationRedPower [totalRedEnergyCollected];
+			redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			totalRedEnergyCollected += 1;
+			canUpdateImage = false;
+			StartCoroutine(WaitUpdateImage(0.05f));
+		}
 	}
 
 	public void showUpdatedScore() {
@@ -162,7 +235,7 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
-		if (!lightImpulse) {
+		if (!lightImpulse && totalRedEnergyCollected>=15) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
 
@@ -172,13 +245,13 @@ public class GameManager : MonoBehaviour {
 
 			anImpulse.SetBool ("impulsePower", true);
 
-			StartCoroutine (WaitLightRestart(15f));
+			StartCoroutine (WaitLightRestart(15.2f));
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
 		}
 	}
 
 	public void doBarrier(){
-		if (!barrier) {
+		if (!barrier && totalBlueEnergyCollected>=15) {
 			barrier = true;
 			invincible = true;
 
@@ -190,7 +263,7 @@ public class GameManager : MonoBehaviour {
 
 			barrierCollider.radius = 2f;
 
-			StartCoroutine(WaitBarrierRestart (15f));
+			StartCoroutine(WaitBarrierRestart (15.2f));
 			StartCoroutine(WaitBarrierColliderReset(3f));
 		}
 	}
@@ -218,6 +291,11 @@ public class GameManager : MonoBehaviour {
 	IEnumerator WaitLightRestart(float delay){
 		yield return new WaitForSeconds(delay);
 		lightImpulse = false;
+	}
+
+	IEnumerator WaitUpdateImage(float delay){
+		yield return new WaitForSeconds(delay);
+		canUpdateImage = true;
 	}
 
 	public void returnLightImpulse(float oldSizeCamera){
@@ -295,6 +373,7 @@ public class GameManager : MonoBehaviour {
 		anYellowTimer = (GameObject.FindGameObjectWithTag ("yellowTimer")).GetComponent<Animator> () as Animator;
 		gameOverAnimator = (GameObject.Find ("GUICanvas")).GetComponent<Animator>() as Animator;
 		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
+		canUpdateImage = true;
 	}
 }
 	

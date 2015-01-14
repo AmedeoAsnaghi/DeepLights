@@ -21,14 +21,17 @@ public class collisions : MonoBehaviour {
 		Debug.Log (other.gameObject.tag);
 		if (other.gameObject.tag == "RedSphere") {
 			gameManager.increaseLife (20);
+			gameManager.redSphereCatched();
 			gameManager.showUpdatedScore ();
 		} 
 		else if (other.gameObject.tag == "BlueSphere") {
 			gameManager.increaseLife (20);
+			gameManager.blueSphereCatched();
 			gameManager.showUpdatedScore ();
 		} 
 		else if (other.gameObject.tag == "YellowSphere") {
 			gameManager.increaseLife (20);
+			gameManager.yellowSphereCatched();
 			gameManager.showUpdatedScore ();
 		} 
 		//TODO: manage other collision
