@@ -27,6 +27,9 @@ public class GameManager : MonoBehaviour {
 	private Animator anWarning;
 	private Animator anBarrier;
 	private Animator gameOverAnimator;
+	private Animator anRedTimer;
+	private Animator anBlueTimer;
+	private Animator anYellowTimer;
 
 	public Color red;
 	public  Color lightRed;
@@ -169,7 +172,7 @@ public class GameManager : MonoBehaviour {
 
 			anImpulse.SetBool ("impulsePower", true);
 
-			StartCoroutine (WaitLightRestart(10f));
+			StartCoroutine (WaitLightRestart(15f));
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
 		}
 	}
@@ -184,9 +187,10 @@ public class GameManager : MonoBehaviour {
 			jellyfishColorManager.updateColorJellyfish(blue);
 
 			anBarrier.SetBool("barrierPower", true);
+
 			barrierCollider.radius = 2f;
 
-			StartCoroutine(WaitBarrierRestart (10f));
+			StartCoroutine(WaitBarrierRestart (15f));
 			StartCoroutine(WaitBarrierColliderReset(3f));
 		}
 	}
@@ -196,6 +200,7 @@ public class GameManager : MonoBehaviour {
 		invincible = false;
 		barrierCollider.radius = 0;
 		anBarrier.SetBool ("barrierPower", false);
+		anBlueTimer.SetTrigger("barrierUsed");
 	}
 	IEnumerator WaitBarrierRestart(float delay){
 		yield return new WaitForSeconds (delay);
@@ -206,6 +211,7 @@ public class GameManager : MonoBehaviour {
 		yield return new WaitForSeconds(delay);
 		anImpulse.SetBool ("impulsePower", false);
 		lightImpulseCamera = false;
+		anRedTimer.SetTrigger ("lightImpulseUsed");
 		//returnLightImpulse(oldSizeCamera);
 	}
 
@@ -284,6 +290,9 @@ public class GameManager : MonoBehaviour {
 		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
 		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
 		anBarrier = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<Animator> () as Animator;
+		anRedTimer = (GameObject.FindGameObjectWithTag ("redTimer")).GetComponent<Animator> () as Animator;
+		anBlueTimer = (GameObject.FindGameObjectWithTag ("blueTimer")).GetComponent<Animator> () as Animator;
+		anYellowTimer = (GameObject.FindGameObjectWithTag ("yellowTimer")).GetComponent<Animator> () as Animator;
 		gameOverAnimator = (GameObject.Find ("GUICanvas")).GetComponent<Animator>() as Animator;
 		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
 	}
