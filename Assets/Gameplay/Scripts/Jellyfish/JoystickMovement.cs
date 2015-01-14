@@ -50,6 +50,26 @@ public class JoystickMovement : MonoBehaviour {
 	void Update () {
 		var currentState  = an.GetCurrentAnimatorStateInfo(0);	
 
+		/*---GO STRAIGHT----*/
+		if (getThrust ())// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
+		{
+			//			transform.position += transform.up * speed * Time.deltaTime;
+			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
+				rigidBody.AddForce (transform.up * speed, ForceMode2D.Impulse);
+			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
+				rigidBody.AddForce (-transform.up * speed);
+			if (!i_am_moving) {
+				i_am_moving = true;
+				an.SetBool ("is_moving", true);
+			}
+		}
+		else {
+			if (i_am_moving) {
+				i_am_moving = false;
+				an.SetBool ("is_moving", false);
+			}
+		}
+
 		/*---TURN_LEFT----*/
 		if (getTurn () < 0) {
 			//transform.Rotate(Vector3.forward * rotationSpeed * linearAccelleration * Time.deltaTime);
@@ -87,24 +107,10 @@ public class JoystickMovement : MonoBehaviour {
 				linearAccelleration = 0;
 			}
 		}
-		if (getThrust ())// &&  !(an.GetBool("turning_right") || an.GetBool("turning_left"))) 
-		{
-			//			transform.position += transform.up * speed * Time.deltaTime;
-			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
-				rigidBody.AddForce (transform.up * speed, ForceMode2D.Impulse);
-			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
-				rigidBody.AddForce (-transform.up * speed);
-			if (!i_am_moving) {
-				i_am_moving = true;
-				an.SetBool ("is_moving", true);
-			}
-		}
-		else {
-			if (i_am_moving) {
-				i_am_moving = false;
-				an.SetBool ("is_moving", false);
-			}
-		}
+
+
+
+		//-------POWERS-------
 		if (getLightImpulse ()) {
 			gameManager.doLightImpulse ();
 		}
