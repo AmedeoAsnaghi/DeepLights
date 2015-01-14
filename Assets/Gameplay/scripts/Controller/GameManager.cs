@@ -137,7 +137,7 @@ public class GameManager : MonoBehaviour {
 			}
 			canGetLife = false;
 			jellyfishLight.updateJellyfishLight();
-			StartCoroutine (WaitForLife (0.5f));
+			StartCoroutine (WaitForLife (1f));
 		}
 		return currentJellyFishLife;
 	}
@@ -153,7 +153,7 @@ public class GameManager : MonoBehaviour {
 			blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 			totalBlueEnergyCollected += 1;
 			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(0.05f));
+			StartCoroutine(WaitUpdateImage(1f));
 		}
 		Debug.Log (totalBlueEnergyCollected);
 	}
@@ -165,7 +165,7 @@ public class GameManager : MonoBehaviour {
 			yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 			totalYellowEnergyCollected += 1;
 			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(0.05f));
+			StartCoroutine(WaitUpdateImage(1f));
 		}
 	}
 
@@ -176,7 +176,7 @@ public class GameManager : MonoBehaviour {
 			redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 			totalRedEnergyCollected += 1;
 			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(0.05f));
+			StartCoroutine(WaitUpdateImage(1f));
 		}
 	}
 
@@ -374,6 +374,20 @@ public class GameManager : MonoBehaviour {
 		gameOverAnimator = (GameObject.Find ("GUICanvas")).GetComponent<Animator>() as Animator;
 		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
 		canUpdateImage = true;
+
+		Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
+		Texture2D texture = activationBluePower [totalBlueEnergyCollected];
+		blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+
+		Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
+		texture = activationYellowPower [totalYellowEnergyCollected];
+		yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+
+		Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
+		texture = activationRedPower [totalRedEnergyCollected];
+		redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+
+
 	}
 }
 	

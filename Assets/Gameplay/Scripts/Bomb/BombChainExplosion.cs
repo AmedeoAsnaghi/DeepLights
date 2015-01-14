@@ -23,6 +23,7 @@ public class BombChainExplosion : MonoBehaviour {
 		Debug.Log ("SONO LA BOMBA"  + other.gameObject.tag);
 
 		an.SetTrigger("bombTouched");
+		gameObject.GetComponentsInParent<AudioSource>()[0].audio.Play ();
 		StartCoroutine(BombExplosionEffect());
 		updateCollider = true;
 

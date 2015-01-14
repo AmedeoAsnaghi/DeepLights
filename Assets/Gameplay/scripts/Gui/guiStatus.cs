@@ -102,12 +102,12 @@ public class guiStatus : MonoBehaviour {
 
 	IEnumerator IncreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
-		int i = 60 - currentHealthFrame;
+		int i = 49 - currentHealthFrame;
 		if (currentHealthFrame<this.decreaseLifeTextures.Length)
-			gt.texture = this.increaseLifeTextures[i+1];
+			gt.texture = this.increaseLifeTextures[i];
 		i++;
 		count++;
-		currentHealthFrame = 60 - i;
+		currentHealthFrame = 49 - i;
 
 		if (11 == count) {
 			running = false;	
