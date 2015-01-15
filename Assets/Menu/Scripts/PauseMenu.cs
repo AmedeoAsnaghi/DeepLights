@@ -31,6 +31,7 @@ public class PauseMenu : MonoBehaviour {
 			if(pauseGame == true)
 			{
 				selection = 0;
+				gm.setPause(true);
 				canChange = true;
 				anGui.SetTrigger("startPause");
 				Time.timeScale = 0.001f;
@@ -116,6 +117,7 @@ public class PauseMenu : MonoBehaviour {
 			Time.timeScale = 1;
 			gm.restartLevel();
 		}
+		gm.setPause(false);
 	}
 	
 	void setManager ()

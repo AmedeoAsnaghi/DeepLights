@@ -59,6 +59,7 @@ public class GameManager : MonoBehaviour {
 	private CircleCollider2D barrierCollider;
 
 	private GameOverMenu gameOver;
+	private bool pause;
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -70,6 +71,7 @@ public class GameManager : MonoBehaviour {
 		totalBlueEnergyCollected = 0;
 		totalRedEnergyCollected = 0;
 		totalYellowEnergyCollected = 0;
+		pause = false;
 
 		//inizialize the colors of the jellyfish
 		currentColor = grey;
@@ -115,6 +117,10 @@ public class GameManager : MonoBehaviour {
 
 	}
 
+	public void setPause (bool p){
+		pause = p;
+	}
+
 	public void usePower(int type){
 		switch(type)
 		{
@@ -126,7 +132,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public int decreaseLife(int value) {
-		if (!invincible) { 
+		if ((!invincible)&&(!pause)) { 
 			currentJellyFishLife = currentJellyFishLife - value;
 			anWarning.SetBool ("warning", true);
 			if (isDead()) {
@@ -144,7 +150,7 @@ public class GameManager : MonoBehaviour {
 	}
 	
 	public int increaseLife(int value) {
-		if (canGetLife) {
+		if ((canGetLife)&&(!pause)) {
 			currentJellyFishLife = currentJellyFishLife + value;
 			if (currentJellyFishLife > 100) {
 					currentJellyFishLife = 100;
@@ -161,7 +167,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void blueSphereCatched(){
-		if (canUpdateImage) {
+		if ((canUpdateImage)&&(!pause)) {
 			Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
 			Texture2D texture = activationBluePower [totalBlueEnergyCollected];
 			blueImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
@@ -173,7 +179,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void yellowSphereCatched() {
-		if (canUpdateImage) {
+		if ((canUpdateImage)&&(!pause)) {
 			Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
 			Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
 			yellowImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
@@ -184,7 +190,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void redSphereCatched(){
-		if (canUpdateImage) {
+		if ((canUpdateImage)&&(!pause)) {
 			Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
 			Texture2D texture = activationRedPower [totalRedEnergyCollected];
 			redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
@@ -195,7 +201,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void showUpdatedScore() {
-		if (canIncreaseScore) {
+		if ((canIncreaseScore)&&(!pause)) {
 			bScore.showUpdatedScore ();
 			rScore.showUpdatedScore ();
 			yScore.showUpdatedScore ();
@@ -253,7 +259,7 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
-		if (!lightImpulse /*&& totalRedEnergyCollected>=15*/) {
+		if (!lightImpulse /*&& totalRedEnergyCollected>=15*/&& !pause) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
 
@@ -271,7 +277,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doBarrier(){
-		if (!barrier /*&& totalBlueEnergyCollected>=15*/) {
+		if (!barrier /*&& totalBlueEnergyCollected>=15*/&& !pause) {
 			barrier = true;
 			invincible = true;
 
@@ -291,7 +297,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doFlash(){
-		if (!flash /* && totalYellowEnergyCollected>=15*/) {
+		if (!flash /* && totalYellowEnergyCollected>=15*/&& !pause) {
 			flash = true;
 
 			//update color
