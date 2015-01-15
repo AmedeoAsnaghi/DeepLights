@@ -49,7 +49,7 @@ public class guiStatus : MonoBehaviour {
 
 		currentHealthFrame = (100 - health) * 12 / 20;
 		gt.texture = this.decreaseLifeTextures[currentHealthFrame];
-		gt.pixelInset = new Rect(10, -30, 260,60);
+		gt.pixelInset = new Rect(40, -30, 260,60);
 		running = false;
 	}
 
@@ -82,7 +82,7 @@ public class guiStatus : MonoBehaviour {
 				StartCoroutine (DecreaseLife (0.01f, deltaHealth));
 			}
 		}
-		gt.pixelInset = new Rect(10, -30, 260,60);
+		gt.pixelInset = new Rect(40, -30, 260,60);
 	}
 
 	IEnumerator DecreaseLife(float delay, float deltaHealth){
