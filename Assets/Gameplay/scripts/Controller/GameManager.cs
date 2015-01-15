@@ -203,6 +203,10 @@ public class GameManager : MonoBehaviour {
 		}
 		StartCoroutine (WaitToUpdateScore (0.05f));
 	}
+
+	public int getCollectedEnergy() {
+		return rScore.getCollectedEnergy () + bScore.getCollectedEnergy () + yScore.getCollectedEnergy ();
+	}
 	
 	public bool isDead() {
 		return currentJellyFishLife <= 0;

@@ -24,4 +24,8 @@ public class YellowScore : MonoBehaviour {
 		currentSpheres = totalYellowSpheres - remainingSpheres;
 		gt.text = currentSpheres.ToString() + "/" + totalYellowSpheres.ToString();
 	}
+
+	public int getCollectedEnergy(){
+		return currentSpheres;
+	}
 }

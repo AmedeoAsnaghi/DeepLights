@@ -25,4 +25,8 @@ public class RedScore : MonoBehaviour {
 		currentSpheres = totalRedSpheres - remainingSpheres;
 		gt.text = currentSpheres.ToString() + "/" + totalRedSpheres.ToString();
 	}
+
+	public int getCollectedEnergy(){
+		return currentSpheres;
+	}
 }

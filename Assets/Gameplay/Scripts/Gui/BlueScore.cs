@@ -24,4 +24,8 @@ public class BlueScore : MonoBehaviour {
 		currentSpheres = totalBlueSpheres - remainingSpheres;
 		gt.text = currentSpheres.ToString() + "/" + totalBlueSpheres.ToString();
 	}
+
+	public int getCollectedEnergy(){
+		return currentSpheres;
+	}
 }
