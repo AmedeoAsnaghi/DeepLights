@@ -169,6 +169,7 @@ public class GameManager : MonoBehaviour {
 	public void blueSphereCatched(){
 		if ((canUpdateImage)&&(!pause)) {
 			Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
+			totalBlueEnergyCollected += 1;
 			if (totalBlueEnergyCollected<activationBluePower.Length) {
 				Texture2D texture = activationBluePower [totalBlueEnergyCollected];
 				blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
@@ -176,7 +177,7 @@ public class GameManager : MonoBehaviour {
 			else {
 				blueImage.overrideSprite = null;
 			}
-			totalBlueEnergyCollected += 1;
+
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
 		}
@@ -186,6 +187,7 @@ public class GameManager : MonoBehaviour {
 	public void yellowSphereCatched() {
 		if ((canUpdateImage)&&(!pause)) {
 			Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
+			totalYellowEnergyCollected += 1;
 			if (totalYellowEnergyCollected<activationYellowPower.Length) {
 				Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
 				yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
@@ -193,7 +195,7 @@ public class GameManager : MonoBehaviour {
 			else {
 				yellowImage.overrideSprite = null;
 			}
-			totalYellowEnergyCollected += 1;
+
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
 		}
@@ -202,6 +204,7 @@ public class GameManager : MonoBehaviour {
 	public void redSphereCatched(){
 		if ((canUpdateImage)&&(!pause)) {
 			Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
+			totalRedEnergyCollected += 1;
 			if (totalRedEnergyCollected<activationRedPower.Length){
 				Texture2D texture = activationRedPower [totalRedEnergyCollected];
 				redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
@@ -209,7 +212,6 @@ public class GameManager : MonoBehaviour {
 			else {
 				redImage.overrideSprite = null;
 			}
-			totalRedEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
 		}
@@ -458,15 +460,15 @@ public class GameManager : MonoBehaviour {
 
 		Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
 		Texture2D texture = activationBluePower [totalBlueEnergyCollected];
-		blueImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 		Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
 		texture = activationYellowPower [totalYellowEnergyCollected];
-		yellowImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 		Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
 		texture = activationRedPower [totalRedEnergyCollected];
-		redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 		gameOver = (GameObject.Find ("Controller")).GetComponent<GameOverMenu> () as GameOverMenu;
 		if (level != 0)

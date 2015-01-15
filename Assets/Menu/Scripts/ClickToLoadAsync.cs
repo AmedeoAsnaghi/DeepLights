@@ -9,7 +9,7 @@ public class ClickToLoadAsync : MonoBehaviour {
 	public void ClickAsync(int level)
 	{
 		loadingImage.SetActive(true);
-		Application.LoadLevel (level);
+	
 	}
 	
 	
