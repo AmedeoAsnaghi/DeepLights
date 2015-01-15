@@ -34,6 +34,9 @@ public class JoystickMovement : MonoBehaviour {
 	bool getBarrier(){
 		return Input.GetButtonDown ("Barrier");
 	}
+	bool getFlash(){
+		return Input.GetButtonDown ("Flash");
+	}
 	#endregion
 	
 	// Use this for initialization
@@ -116,6 +119,9 @@ public class JoystickMovement : MonoBehaviour {
 		}
 		if (getBarrier ()) {
 			gameManager.doBarrier();
+		}
+		if (getFlash ()) {
+			gameManager.doFlash();		
 		}
 	}
 }

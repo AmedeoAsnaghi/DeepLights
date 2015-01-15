@@ -37,12 +37,17 @@
 	}
 
 	bool getLightImpulse(){
-		return (Input.GetKeyDown(KeyCode.Q));
+		return (Input.GetKeyDown(KeyCode.A));
 	}
 
 	bool getBarrier(){
-		return (Input.GetKeyDown (KeyCode.E));
+		return (Input.GetKeyDown (KeyCode.S));
 	}
+
+	bool getFlash(){
+		return (Input.GetKeyDown (KeyCode.D));
+	}
+
 	#endregion
 
 	// Use this for initialization
@@ -134,6 +139,9 @@
 		}
 		if (getBarrier ()) {
 			gameManager.doBarrier();		
+		}
+		if (getFlash ()) {
+			gameManager.doFlash();		
 		}
 	}
 }

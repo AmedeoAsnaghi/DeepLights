@@ -17,6 +17,8 @@ public class GameManager : MonoBehaviour {
 	private bool lightImpulse;
 	private bool lightImpulseCamera;
 	private bool barrier;
+	public float barrierRadius = 2f;
+	private bool flash;
 	private BlueScore bScore;
 	private RedScore rScore;
 	private YellowScore yScore;
@@ -40,10 +42,18 @@ public class GameManager : MonoBehaviour {
 	Texture2D[] activationBluePower;
 	Texture2D[] activationYellowPower;
 
+	//colors
+	private Color currentColor;
+	private Color currentLightColor;
 	public Color red;
 	public  Color lightRed;
 	public  Color blue;
 	public  Color lightBlue;
+	public Color yellow;
+	public Color lightYellow;
+	public Color grey;
+	public Color lightGrey;
+
 
 	private CircleCollider2D barrierCollider;
 
@@ -57,6 +67,10 @@ public class GameManager : MonoBehaviour {
 		totalBlueEnergyCollected = 0;
 		totalRedEnergyCollected = 0;
 		totalYellowEnergyCollected = 0;
+
+		//inizialize the colors of the jellyfish
+		currentColor = grey;
+		currentLightColor = lightGrey;
 
 		object[] objects = Resources.LoadAll("BluePowerActivation",typeof(Texture2D));
 		Debug.Log (objects[0]);
@@ -150,7 +164,7 @@ public class GameManager : MonoBehaviour {
 		if (canUpdateImage) {
 			Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
 			Texture2D texture = activationBluePower [totalBlueEnergyCollected];
-			blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			blueImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 			totalBlueEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
@@ -162,7 +176,7 @@ public class GameManager : MonoBehaviour {
 		if (canUpdateImage) {
 			Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
 			Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
-			yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			yellowImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 			totalYellowEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
@@ -173,7 +187,7 @@ public class GameManager : MonoBehaviour {
 		if (canUpdateImage) {
 			Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
 			Texture2D texture = activationRedPower [totalRedEnergyCollected];
-			redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 			totalRedEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
@@ -235,13 +249,15 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
-		if (!lightImpulse && totalRedEnergyCollected>=15) {
+		if (!lightImpulse /*&& totalRedEnergyCollected>=15*/) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
 
 			//update color
 			jellyfishLight.updateJellyfishLightColor(lightRed);
 			jellyfishColorManager.updateColorJellyfish(red);
+			currentColor = red;
+			currentLightColor = lightRed;
 
 			anImpulse.SetBool ("impulsePower", true);
 
@@ -251,23 +267,45 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doBarrier(){
-		if (!barrier && totalBlueEnergyCollected>=15) {
+		if (!barrier /*&& totalBlueEnergyCollected>=15*/) {
 			barrier = true;
 			invincible = true;
 
 			//update color
 			jellyfishLight.updateJellyfishLightColor(lightBlue);
 			jellyfishColorManager.updateColorJellyfish(blue);
+			currentColor = blue;
+			currentLightColor = lightBlue;
 
 			anBarrier.SetBool("barrierPower", true);
 
-			barrierCollider.radius = 2f;
+			barrierCollider.radius = barrierRadius;
 
 			StartCoroutine(WaitBarrierRestart (15.2f));
 			StartCoroutine(WaitBarrierColliderReset(3f));
 		}
 	}
-	
+
+	public void doFlash(){
+		if (!flash /* && totalYellowEnergyCollected>=15*/) {
+			flash = true;
+
+			//update color
+			jellyfishLight.updateJellyfishLightColor(lightYellow);
+			jellyfishColorManager.updateColorJellyfish(yellow);
+			currentColor = yellow;
+			currentLightColor = lightYellow;
+
+			//TODO: flash power
+
+			StartCoroutine(WaitFlashRestart(15.2f));
+		}
+	}
+
+	IEnumerator WaitFlashRestart(float delay){
+		yield return new WaitForSeconds (delay);
+		flash = false;
+	}
 	IEnumerator WaitBarrierColliderReset(float delay){
 		yield return new WaitForSeconds (delay);
 		invincible = false;
@@ -358,11 +396,15 @@ public class GameManager : MonoBehaviour {
 		yScore = (GameObject.FindGameObjectWithTag ("YellowScore")).GetComponent<YellowScore> ()as YellowScore;
 		lightVisible = jellyFish.GetComponentsInChildren<Light> (false) as Light[];
 		lightRange = lightVisible[0].range;
+
 		jellyfishLight = jellyFish.GetComponentInChildren<lightPulse> () as lightPulse;
 		jellyfishColorManager = jellyFish.GetComponent<ColorManager> () as ColorManager;
+		jellyfishLight.updateJellyfishLightColor (currentLightColor);
+		jellyfishColorManager.updateColorJellyfish (currentColor);
 		mainCamera = Camera.main;
 		lightImpulse = false;
 		barrier = false;
+		flash = false;
 		lightImpulseCamera = false;
 		oldSizeCamera = mainCamera.orthographicSize;
 		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
@@ -377,15 +419,15 @@ public class GameManager : MonoBehaviour {
 
 		Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
 		Texture2D texture = activationBluePower [totalBlueEnergyCollected];
-		blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		blueImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 		Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
 		texture = activationYellowPower [totalYellowEnergyCollected];
-		yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		yellowImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 		Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
 		texture = activationRedPower [totalRedEnergyCollected];
-		redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 
 	}

@@ -14,7 +14,7 @@ public class lightPulse : MonoBehaviour {
 	private bool update;
 	public float updateStep = 0.1f;
 
-	public float updateColorStep = 0.01f;
+	public float updateColorStep = 1f;
 	private Color targetColor;
 	private bool updateColor;
 	private float red,green,blue,a;
@@ -27,6 +27,7 @@ public class lightPulse : MonoBehaviour {
 		currentLightRange = lightRange;
 		update = false;
 		updateColor = false;
+		updateColorStep = updateColorStep * Time.deltaTime;
 	}
 	
 	// Update is called once per frame

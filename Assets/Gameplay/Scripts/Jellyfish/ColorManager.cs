@@ -8,7 +8,7 @@ public class ColorManager : MonoBehaviour {
 	ParticleSystem particle;
 	SpriteRenderer heartSprite;
 
-	public float updateColorStep = 0.01f;
+	public float updateColorStep = 1f;
 	private Color targetColor;
 	private bool updateColor;
 	private float red,green,blue,a;
@@ -19,6 +19,7 @@ public class ColorManager : MonoBehaviour {
 		heartSprite = (heart.GetComponent<SpriteRenderer> ()) as SpriteRenderer; 
 		particellare_cuore = (GameObject.Find ("particellare_cuore")) as GameObject;
 		particle = particellare_cuore.GetComponent<ParticleSystem>() as ParticleSystem;
+		updateColorStep = updateColorStep * Time.deltaTime;
 	}
 	
 	// Update is called once per frame
