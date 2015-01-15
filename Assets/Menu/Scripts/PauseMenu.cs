@@ -67,7 +67,7 @@ public class PauseMenu : MonoBehaviour {
 					StartCoroutine(waitAxis());
 				}
 			}
-			else if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("MovementImpulse"))){
+			if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("MovementImpulse"))){
 				if(selection==0){
 					anMiddle.SetTrigger("press");
 					pauseGame = false;
