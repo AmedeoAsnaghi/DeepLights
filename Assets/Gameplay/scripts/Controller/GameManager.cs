@@ -58,6 +58,8 @@ public class GameManager : MonoBehaviour {
 
 	private CircleCollider2D barrierCollider;
 
+	private GameOverMenu gameOver;
+
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
 	}
@@ -128,12 +130,9 @@ public class GameManager : MonoBehaviour {
 			currentJellyFishLife = currentJellyFishLife - value;
 			anWarning.SetBool ("warning", true);
 			if (isDead()) {
-				Time.timeScale = 0;
-				(GameObject.FindGameObjectWithTag ("buttonRestart")).GetComponent <Button> ().interactable = true;
-				(GameObject.FindGameObjectWithTag ("buttonMenu2")).GetComponent <Button> ().interactable = true;
 				jellyfishColorManager.updateColorJellyfish(Color.black);
 				(jellyFish.GetComponent<movement>() as movement).enabled = false;
-				gameOverAnimator.SetTrigger("GameOver");
+				gameOver.gameover();
 
 			}
 			invincible = true;
@@ -438,7 +437,7 @@ public class GameManager : MonoBehaviour {
 		texture = activationRedPower [totalRedEnergyCollected];
 		redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
-
+		gameOver = (GameObject.Find ("Controller")).GetComponent<GameOverMenu> () as GameOverMenu;
 	}
 }
 	
