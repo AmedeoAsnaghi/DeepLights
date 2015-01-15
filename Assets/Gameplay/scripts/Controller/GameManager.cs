@@ -169,8 +169,13 @@ public class GameManager : MonoBehaviour {
 	public void blueSphereCatched(){
 		if ((canUpdateImage)&&(!pause)) {
 			Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
-			Texture2D texture = activationBluePower [totalBlueEnergyCollected];
-			blueImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			if (totalBlueEnergyCollected<activationBluePower.Length) {
+				Texture2D texture = activationBluePower [totalBlueEnergyCollected];
+				blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			}
+			else {
+				blueImage.overrideSprite = null;
+			}
 			totalBlueEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
@@ -181,8 +186,13 @@ public class GameManager : MonoBehaviour {
 	public void yellowSphereCatched() {
 		if ((canUpdateImage)&&(!pause)) {
 			Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
-			Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
-			yellowImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			if (totalYellowEnergyCollected<activationYellowPower.Length) {
+				Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
+				yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			}
+			else {
+				yellowImage.overrideSprite = null;
+			}
 			totalYellowEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
@@ -192,8 +202,13 @@ public class GameManager : MonoBehaviour {
 	public void redSphereCatched(){
 		if ((canUpdateImage)&&(!pause)) {
 			Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
-			Texture2D texture = activationRedPower [totalRedEnergyCollected];
-			redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			if (totalRedEnergyCollected<activationRedPower.Length){
+				Texture2D texture = activationRedPower [totalRedEnergyCollected];
+				redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+			}
+			else {
+				redImage.overrideSprite = null;
+			}
 			totalRedEnergyCollected += 1;
 			canUpdateImage = false;
 			StartCoroutine(WaitUpdateImage(1f));
@@ -259,7 +274,7 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
-		if (!lightImpulse /*&& totalRedEnergyCollected>=15*/&& !pause) {
+		if (!lightImpulse && totalRedEnergyCollected>=10 && !pause) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
 
@@ -277,7 +292,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doBarrier(){
-		if (!barrier /*&& totalBlueEnergyCollected>=15*/&& !pause) {
+		if (!barrier && totalBlueEnergyCollected>=10 && !pause) {
 			barrier = true;
 			invincible = true;
 
@@ -297,7 +312,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doFlash(){
-		if (!flash /* && totalYellowEnergyCollected>=15*/&& !pause) {
+		if (!flash && totalYellowEnergyCollected>=10 && !pause) {
 			flash = true;
 
 			//update color
