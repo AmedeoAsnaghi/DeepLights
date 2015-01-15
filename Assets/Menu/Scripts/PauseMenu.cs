@@ -5,25 +5,21 @@ using UnityEngine.UI;
 public class PauseMenu : MonoBehaviour {
 
 	private bool pauseGame;
-	private bool showGUI;
 	private GameObject pauseGUI;
 	private Animator anGui;
 	private int selection;
 	private Animator anLeft, anMiddle, anRight;
 	private GameManager gm;
+	private bool canChange;
 	// Use this for initialization
 	void Start () {
 		pauseGame = false;
-		showGUI = false;
 		pauseGUI = GameObject.Find("PausedGUI");
 		anGui = pauseGUI.GetComponent<Animator> ()as Animator;
 		anLeft = (GameObject.Find ("Left")).GetComponent<Animator> () as Animator;
 		anMiddle = (GameObject.Find ("Middle")).GetComponent<Animator> () as Animator;
 		anRight = (GameObject.Find ("Right")).GetComponent<Animator> () as Animator;
 		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
-
-		//pauseGUI.guiTexture.transform.position = new Vector3(0.35f,0.5f,0);
-		//pauseGUI.guiTexture.transform.localScale = Vector3.zero;
 	}
 	
 	// Update is called once per frame
@@ -35,29 +31,43 @@ public class PauseMenu : MonoBehaviour {
 			if(pauseGame == true)
 			{
 				selection = 0;
+				canChange = true;
 				anGui.SetTrigger("startPause");
 				Time.timeScale = 0.001f;
 				pauseGame = true;
 				updateSelection();
 			}
+			else if(!pauseGame){
+				selection = 0;
+				anMiddle.SetTrigger("press");
+				pauseGame = false;
+				updateSelection();
+				StartCoroutine(press ());
+			}
 		}
 		if(pauseGame){
-			if(Input.GetKeyDown(KeyCode.LeftArrow)){
-				if(selection == -1)
-					selection = 1;
-				else
-					selection--;
-				updateSelection();
+			if(canChange){
+				if((Input.GetKeyDown(KeyCode.LeftArrow))||(Input.GetAxis("Horizontal")==-1)){
+					if(selection == -1)
+						selection = 1;
+					else
+						selection--;
+					updateSelection();
+					canChange=false;
+					StartCoroutine(waitAxis());
 
+				}
+				else if((Input.GetKeyDown(KeyCode.RightArrow))||(Input.GetAxis("Horizontal")==1)){
+					if(selection == 1)
+						selection = -1;
+					else
+						selection++;
+					updateSelection();
+					canChange=false;
+					StartCoroutine(waitAxis());
+				}
 			}
-			else if(Input.GetKeyDown(KeyCode.RightArrow)){
-				if(selection == 1)
-					selection = -1;
-				else
-					selection++;
-				updateSelection();
-			}
-			else if (Input.GetKeyDown(KeyCode.Return)){
+			else if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("MovementImpulse"))){
 				if(selection==0){
 					anMiddle.SetTrigger("press");
 					pauseGame = false;
@@ -85,12 +95,17 @@ public class PauseMenu : MonoBehaviour {
 		anMiddle.SetInteger ("hover", selection);
 	}
 
+	IEnumerator waitAxis(){
+		yield return new WaitForSeconds (0.0005f);
+		canChange = true;
+	}
+
 	IEnumerator press() {
 		yield return new WaitForSeconds (0.0005f);
+		anGui.ResetTrigger("startPause");
+		anGui.SetTrigger("endPause");
 		if(selection==0){
 			anMiddle.SetInteger("hover",1);
-			anGui.ResetTrigger("startPause");
-			anGui.SetTrigger("endPause");
 			Time.timeScale = 1;
 		}
 		else if (selection == 1){
