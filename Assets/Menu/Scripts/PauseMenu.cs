@@ -11,19 +11,19 @@ public class PauseMenu : MonoBehaviour {
 	private Animator anLeft, anMiddle, anRight;
 	private GameManager gm;
 	private bool canChange;
+	private Camera mainCamera;
 	// Use this for initialization
 	void Start () {
-		pauseGame = false;
-		pauseGUI = GameObject.Find("PausedGUI");
-		anGui = pauseGUI.GetComponent<Animator> ()as Animator;
-		anLeft = (GameObject.Find ("Left")).GetComponent<Animator> () as Animator;
-		anMiddle = (GameObject.Find ("Middle")).GetComponent<Animator> () as Animator;
-		anRight = (GameObject.Find ("Right")).GetComponent<Animator> () as Animator;
-		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
+		setManager ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+
+		if (mainCamera == null) {
+			this.setManager();		
+		}
+
 		if((Input.GetKeyDown("p"))||(Input.GetButtonDown("Pause")))
 		{
 			pauseGame = !pauseGame;
@@ -118,4 +118,15 @@ public class PauseMenu : MonoBehaviour {
 		}
 	}
 	
+	void setManager ()
+	{
+		mainCamera = Camera.main;
+		pauseGame = false;
+		pauseGUI = GameObject.Find ("PausedGUI");
+		anGui = pauseGUI.GetComponent<Animator> () as Animator;
+		anLeft = (GameObject.Find ("Left")).GetComponent<Animator> () as Animator;
+		anMiddle = (GameObject.Find ("Middle")).GetComponent<Animator> () as Animator;
+		anRight = (GameObject.Find ("Right")).GetComponent<Animator> () as Animator;
+		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
+	}
 }

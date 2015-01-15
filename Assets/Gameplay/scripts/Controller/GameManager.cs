@@ -34,7 +34,7 @@ public class GameManager : MonoBehaviour {
 	private Animator anWarning;
 	private Animator anBarrier;
 	private Animator anFlash;
-	private Animator gameOverAnimator;
+	private Animator anLoading;
 	private Animator anRedTimer;
 	private Animator anBlueTimer;
 	private Animator anYellowTimer;
@@ -378,12 +378,18 @@ public class GameManager : MonoBehaviour {
 
 	public void changeLevel() {
 		if (canChangeLevel) {
-			mainCamera = null;
+			anLoading.SetTrigger("startLoading");
 			canChangeLevel = false;
-			level += 1;
-			Application.LoadLevel (level);
+			StartCoroutine(nextLevel(3f));
 			StartCoroutine (WaitLevel(10f));
 		}
+	}
+
+	IEnumerator nextLevel(float delay){
+		yield return new WaitForSeconds(delay);
+		mainCamera = null;
+		level += 1;
+		Application.LoadLevel (level);
 	}
 
 	IEnumerator WaitLevel(float delay){
@@ -399,7 +405,7 @@ public class GameManager : MonoBehaviour {
 	public void setManager() {
 		if (level == 0) {
 			DestroyImmediate(gameObject);
-				}
+		}
 		canChangeLevel = true;
 		jellyFish = GameObject.FindWithTag ("Player");
 		rScore = (GameObject.FindGameObjectWithTag ("RedScore")).GetComponent<RedScore> ()as RedScore;
@@ -425,7 +431,7 @@ public class GameManager : MonoBehaviour {
 		anRedTimer = (GameObject.FindGameObjectWithTag ("redTimer")).GetComponent<Animator> () as Animator;
 		anBlueTimer = (GameObject.FindGameObjectWithTag ("blueTimer")).GetComponent<Animator> () as Animator;
 		anYellowTimer = (GameObject.FindGameObjectWithTag ("yellowTimer")).GetComponent<Animator> () as Animator;
-		gameOverAnimator = (GameObject.Find ("GUICanvas")).GetComponent<Animator>() as Animator;
+		anLoading = (GameObject.Find ("Loading")).GetComponent<Animator>() as Animator;
 		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
 		canUpdateImage = true;
 
@@ -442,6 +448,8 @@ public class GameManager : MonoBehaviour {
 		redImage.sprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 
 		gameOver = (GameObject.Find ("Controller")).GetComponent<GameOverMenu> () as GameOverMenu;
+		if (level != 0)
+			anLoading.SetTrigger ("stopLoading");
 	}
 }
 	

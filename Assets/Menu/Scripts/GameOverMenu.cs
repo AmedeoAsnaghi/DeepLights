@@ -9,18 +9,19 @@ public class GameOverMenu : MonoBehaviour {
 	private Animator anLeft, anRight;
 	private GameManager gm;
 	private bool canChange;
+	private Camera mainCamera;
 
 	// Use this for initialization
 	void Start () {
-		gameOver = false;
-		anGui = (GameObject.Find ("GameOverGUI")).GetComponent<Animator> () as Animator;
-		anLeft = (GameObject.Find ("LeftGO")).GetComponent<Animator> () as Animator;
-		anRight = (GameObject.Find ("RightGO")).GetComponent<Animator> () as Animator;
-		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
+		setParameters ();
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		if (mainCamera == null) {
+			setParameters();		
+		}
+
 		if (gameOver) {
 			if(canChange){
 				if((Input.GetKeyDown(KeyCode.LeftArrow))||(Input.GetAxis("Horizontal")==-1)){
@@ -76,5 +77,15 @@ public class GameOverMenu : MonoBehaviour {
 		selection = -1;
 		anGui.SetTrigger ("startGameOver");
 		updateSelection ();
+	}
+
+	void setParameters ()
+	{
+		mainCamera = Camera.main;
+		gameOver = false;
+		anGui = (GameObject.Find ("GameOverGUI")).GetComponent<Animator> () as Animator;
+		anLeft = (GameObject.Find ("LeftGO")).GetComponent<Animator> () as Animator;
+		anRight = (GameObject.Find ("RightGO")).GetComponent<Animator> () as Animator;
+		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
 	}
 }
