@@ -1,13 +1,19 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class collisions : MonoBehaviour {
 
 	GameManager gameManager;
+	Text tutorialText;
+	Animator anTutorial;
 
 	// Use this for initialization
 	void Start () {
 		gameManager = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
+		tutorialText = GameObject.Find ("TutorialText").GetComponent<Text> () as Text;
+		anTutorial = GameObject.Find ("TutorialText").GetComponent<Animator> () as Animator;
+
 	}
 	
 	// Update is called once per frame
@@ -53,7 +59,19 @@ public class collisions : MonoBehaviour {
 		else if (other.gameObject.tag == "nextLevel") {
 			gameManager.changeLevel();
 		} 
+		else if (other.gameObject.tag == "tutorial"){
+			//(tutorialText.GetComponent<Text>as Text).text = (other.gameObject.GetComponent<Text>()as Text).text;
+			tutorialText.text = (other.gameObject.GetComponent<Text>()as Text).text;
+			anTutorial.SetTrigger("showText");
+			StartCoroutine(waitText());
+		}
 
+	}
+
+	IEnumerator waitText() {
+		yield return new WaitForSeconds (5f);
+		anTutorial.ResetTrigger("showText");
+		anTutorial.SetTrigger("hideText");
 	}
 
 	IEnumerator DestroyBomb(GameObject go) {
