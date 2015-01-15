@@ -17,6 +17,7 @@ public class AttackCollider : MonoBehaviour {
 		colliders = GetComponents<BoxCollider2D> () as BoxCollider2D[];
 		startY = colliders [1].size.y;
 		endY = startY + 2f;
+		step = step * Time.deltaTime;
 	}
 	
 	// Update is called once per frame

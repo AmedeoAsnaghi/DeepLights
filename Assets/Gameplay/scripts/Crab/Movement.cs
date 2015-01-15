@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour {
 	void Start () {
 		goRight = true;
 		startTimer = true;
+		step = step*Time.deltaTime;
 	}
 	
 	// Update is called once per frame
@@ -21,7 +22,7 @@ public class Movement : MonoBehaviour {
 			startTimer = false;
 		}
 		if (goRight)
-			transform.position = new Vector3 (transform.position.x + step, transform.position.y);
+			transform.position = new Vector3 (transform.position.x + step, transform.position.y );
 		else
 			transform.position = new Vector3 (transform.position.x - step, transform.position.y);
 	}
