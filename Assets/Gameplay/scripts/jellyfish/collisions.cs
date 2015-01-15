@@ -3,12 +3,10 @@ using System.Collections;
 
 public class collisions : MonoBehaviour {
 
-	Rigidbody2D rigidBody;
 	GameManager gameManager;
 
 	// Use this for initialization
 	void Start () {
-		rigidBody = GetComponent<Rigidbody2D> () as Rigidbody2D;
 		gameManager = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
 	}
 	
