@@ -33,6 +33,7 @@ public class GameManager : MonoBehaviour {
 	private Animator anImpulse;
 	private Animator anWarning;
 	private Animator anBarrier;
+	private Animator anFlash;
 	private Animator gameOverAnimator;
 	private Animator anRedTimer;
 	private Animator anBlueTimer;
@@ -296,15 +297,22 @@ public class GameManager : MonoBehaviour {
 			currentColor = yellow;
 			currentLightColor = lightYellow;
 
-			//TODO: flash power
+			anFlash.SetBool("flashPower",true);
 
 			StartCoroutine(WaitFlashRestart(15.2f));
+			StartCoroutine(WaitFlashEnd(0.5f));
 		}
 	}
 
 	IEnumerator WaitFlashRestart(float delay){
 		yield return new WaitForSeconds (delay);
 		flash = false;
+	}
+
+	IEnumerator WaitFlashEnd(float delay){
+		yield return new WaitForSeconds (delay);
+		anFlash.SetBool ("flashPower", false);
+		anYellowTimer.SetTrigger ("stunUsed");
 	}
 	IEnumerator WaitBarrierColliderReset(float delay){
 		yield return new WaitForSeconds (delay);
@@ -410,6 +418,7 @@ public class GameManager : MonoBehaviour {
 		anImpulse = (GameObject.FindGameObjectWithTag ("impulse")).GetComponent<Animator> () as Animator;
 		anWarning = (GameObject.FindGameObjectWithTag ("warning")).GetComponent<Animator>() as Animator;
 		anBarrier = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<Animator> () as Animator;
+		anFlash = (GameObject.FindGameObjectWithTag ("flash")).GetComponent<Animator> () as Animator;
 		anRedTimer = (GameObject.FindGameObjectWithTag ("redTimer")).GetComponent<Animator> () as Animator;
 		anBlueTimer = (GameObject.FindGameObjectWithTag ("blueTimer")).GetComponent<Animator> () as Animator;
 		anYellowTimer = (GameObject.FindGameObjectWithTag ("yellowTimer")).GetComponent<Animator> () as Animator;

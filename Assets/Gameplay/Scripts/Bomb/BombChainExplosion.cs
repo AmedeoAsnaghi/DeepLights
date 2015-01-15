@@ -20,13 +20,14 @@ public class BombChainExplosion : MonoBehaviour {
 	}
 
 	void OnTriggerEnter2D(Collider2D other){
-		Debug.Log ("SONO LA BOMBA"  + other.gameObject.tag);
 
-		an.SetTrigger("bombTouched");
-		gameObject.GetComponentsInParent<AudioSource>()[0].audio.Play ();
-		StartCoroutine(BombExplosionEffect());
-		updateCollider = true;
-
+		//Debug.Log ("SONO LA BOMBA"  + other.gameObject.tag);
+		if (other.tag != "flash") {
+			an.SetTrigger ("bombTouched");
+			gameObject.GetComponentsInParent<AudioSource> () [0].audio.Play ();
+			StartCoroutine (BombExplosionEffect ());
+	    	updateCollider = true;
+		}
 
 	}
 
