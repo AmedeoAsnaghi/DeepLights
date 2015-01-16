@@ -62,6 +62,7 @@ public class collisions : MonoBehaviour {
 		else if (other.gameObject.tag == "tutorial"){
 			//(tutorialText.GetComponent<Text>as Text).text = (other.gameObject.GetComponent<Text>()as Text).text;
 			tutorialText.text = (other.gameObject.GetComponent<Text>()as Text).text;
+			Destroy(other.gameObject);
 			anTutorial.SetTrigger("showText");
 			StartCoroutine(waitText());
 		}
