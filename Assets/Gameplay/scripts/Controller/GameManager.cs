@@ -179,7 +179,7 @@ public class GameManager : MonoBehaviour {
 			}
 
 			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(1f));
+			StartCoroutine(WaitUpdateImage(1.5f));
 		}
 		Debug.Log (totalBlueEnergyCollected);
 	}
