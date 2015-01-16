@@ -12,6 +12,8 @@ public class PauseMenu : MonoBehaviour {
 	private GameManager gm;
 	private bool canChange;
 	private Camera mainCamera;
+	private AudioSource audioGui;
+	private AudioSource ambientAudio;
 	// Use this for initialization
 	void Start () {
 		setManager ();
@@ -35,6 +37,7 @@ public class PauseMenu : MonoBehaviour {
 				canChange = true;
 				anGui.SetTrigger("startPause");
 				Time.timeScale = 0.001f;
+				ambientAudio.audio.Stop ();
 				pauseGame = true;
 				updateSelection();
 			}
@@ -55,6 +58,7 @@ public class PauseMenu : MonoBehaviour {
 						selection--;
 					updateSelection();
 					canChange=false;
+					audioGui.audio.Play();
 					StartCoroutine(waitAxis());
 
 				}
@@ -65,6 +69,7 @@ public class PauseMenu : MonoBehaviour {
 						selection++;
 					updateSelection();
 					canChange=false;
+					audioGui.audio.Play();
 					StartCoroutine(waitAxis());
 				}
 			}
@@ -108,6 +113,7 @@ public class PauseMenu : MonoBehaviour {
 		if(selection==0){
 			anMiddle.SetInteger("hover",1);
 			Time.timeScale = 1;
+			ambientAudio.audio.Play ();
 		}
 		else if (selection == 1){
 			Time.timeScale = 1;
@@ -126,9 +132,11 @@ public class PauseMenu : MonoBehaviour {
 		pauseGame = false;
 		pauseGUI = GameObject.Find ("PausedGUI");
 		anGui = pauseGUI.GetComponent<Animator> () as Animator;
+		audioGui = pauseGUI.GetComponent<AudioSource> () as AudioSource;
 		anLeft = (GameObject.Find ("Left")).GetComponent<Animator> () as Animator;
 		anMiddle = (GameObject.Find ("Middle")).GetComponent<Animator> () as Animator;
 		anRight = (GameObject.Find ("Right")).GetComponent<Animator> () as Animator;
 		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
+		ambientAudio = gm.GetComponent<AudioSource> () as AudioSource;
 	}
 }

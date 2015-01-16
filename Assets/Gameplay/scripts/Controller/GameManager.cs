@@ -78,7 +78,7 @@ public class GameManager : MonoBehaviour {
 		currentLightColor = lightGrey;
 
 		object[] objects = Resources.LoadAll("BluePowerActivation",typeof(Texture2D));
-		Debug.Log (objects[0]);
+		//Debug.Log (objects[0]);
 		this.activationBluePower = new Texture2D[objects.Length];
 		for(int i=0; i < objects.Length;i++)  
 		{  
