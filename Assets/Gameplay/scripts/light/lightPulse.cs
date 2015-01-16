@@ -23,8 +23,8 @@ public class lightPulse : MonoBehaviour {
 	void Start () {
 		GameObject controller = GameObject.Find("Controller");
 		gameManager = controller.GetComponent<GameManager> () as GameManager;
-		lightRange = light.range * gameManager.showCurrentLife()/100;
-		currentLightRange = lightRange;
+		lightRange = light.range;
+		currentLightRange = lightRange  * gameManager.showCurrentLife()/100;
 		update = false;
 		updateColor = false;
 		updateColorStep = updateColorStep * Time.deltaTime;
