@@ -228,6 +228,8 @@ public class GameManager : MonoBehaviour {
 			if(totalRedEnergyCollected==5){
 				tutorialText.text = "Try to press the red button..";
 				anTutorial.SetTrigger("showText");
+				lightImpulseCamera = false;
+				lightImpulse = false;
 				StartCoroutine(waitText());
 			}
 			canUpdateImage = false;
