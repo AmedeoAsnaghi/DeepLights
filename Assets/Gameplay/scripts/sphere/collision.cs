@@ -27,7 +27,9 @@ public class collision : MonoBehaviour {
 
 		if (other.gameObject.tag == "Player") {
 			explode = true;
-			ps[2].maxParticles = maxParticles;
+			if (gameObject.tag != "yellowPower" && gameObject.tag != "bluePower" && gameObject.tag != "redPower"){
+				ps[2].maxParticles = maxParticles;
+			}
 			StartCoroutine(WaitToExplode());
 		} 
 	}
