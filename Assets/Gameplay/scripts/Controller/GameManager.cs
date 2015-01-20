@@ -24,7 +24,6 @@ public class GameManager : MonoBehaviour {
 	private YellowScore yScore;
 	private int level;
 	private bool canChangeLevel;
-	private bool canUpdateImage;
 
 	private int totalBlueEnergyCollected;
 	private int totalYellowEnergyCollected;
@@ -38,10 +37,6 @@ public class GameManager : MonoBehaviour {
 	private Animator anRedTimer;
 	private Animator anBlueTimer;
 	private Animator anYellowTimer;
-
-	Texture2D[] activationRedPower;
-	Texture2D[] activationBluePower;
-	Texture2D[] activationYellowPower;
 
 	private bool unlockImpulse, unlockBarrier, unlockFlash;
 
@@ -86,30 +81,6 @@ public class GameManager : MonoBehaviour {
 		//inizialize the colors of the jellyfish
 		currentColor = grey;
 		currentLightColor = lightGrey;
-
-		object[] objects = Resources.LoadAll("BluePowerActivation",typeof(Texture2D));
-		//Debug.Log (objects[0]);
-		this.activationBluePower = new Texture2D[objects.Length];
-		for(int i=0; i < objects.Length;i++)  
-		{  
-			this.activationBluePower[i] = (Texture2D)objects[i];
-		}
-
-		objects = Resources.LoadAll("RedPowerActivation", typeof(Texture2D));
-		Debug.Log (objects[0]);
-		this.activationRedPower = new Texture2D[objects.Length];
-		for(int i=0; i < objects.Length;i++)  
-		{  
-			this.activationRedPower[i] = (Texture2D)objects[i];  
-		}
-
-		objects = Resources.LoadAll("YellowPowerActivation", typeof(Texture2D));
-		Debug.Log (objects[0]);
-		this.activationYellowPower = new Texture2D[objects.Length];
-		for(int i=0; i < objects.Length;i++)  
-		{  
-			this.activationYellowPower[i] = (Texture2D)objects[i];  
-		}
 
 		this.setManager ();
 	}
@@ -229,6 +200,7 @@ public class GameManager : MonoBehaviour {
 		unlockImpulse = true;
 		tutorialText.text = "Try to press the red button..";
 		anTutorial.SetTrigger("showText");
+		anRedTimer.SetTrigger ("impulseUnlocked");
 		lightImpulseCamera = false;
 		lightImpulse = false;
 		StartCoroutine(waitText());
@@ -238,6 +210,7 @@ public class GameManager : MonoBehaviour {
 		unlockFlash = true;
 		tutorialText.text = "Try to press the yellow button..";
 		anTutorial.SetTrigger("showText");
+		anYellowTimer.SetTrigger ("flashUnlocked");
 		StartCoroutine(waitText());
 	}
 
@@ -245,6 +218,7 @@ public class GameManager : MonoBehaviour {
 		unlockBarrier = true;
 		tutorialText.text = "Try to press the blue button..";
 		anTutorial.SetTrigger("showText");
+		anBlueTimer.SetTrigger ("barrierUnlocked");
 		StartCoroutine(waitText());
 	}
 	//------------------------------------------------------------
@@ -284,6 +258,7 @@ public class GameManager : MonoBehaviour {
 			currentLightColor = lightRed;
 
 			anImpulse.SetBool ("impulsePower", true);
+			anRedTimer.SetTrigger("greyTimer");
 
 			StartCoroutine (WaitLightRestart(15.2f));
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
@@ -302,6 +277,7 @@ public class GameManager : MonoBehaviour {
 			currentLightColor = lightBlue;
 
 			anBarrier.SetBool("barrierPower", true);
+			anBlueTimer.SetTrigger("greyTimer");
 
 			barrierCollider.radius = barrierRadius;
 
@@ -321,6 +297,7 @@ public class GameManager : MonoBehaviour {
 			currentLightColor = lightYellow;
 
 			anFlash.SetBool("flashPower",true);
+			anYellowTimer.SetTrigger("greyTimer");
 
 			StartCoroutine(WaitFlashRestart(15.2f));
 			StartCoroutine(WaitFlashEnd(0.5f));
@@ -354,17 +331,11 @@ public class GameManager : MonoBehaviour {
 		anImpulse.SetBool ("impulsePower", false);
 		lightImpulseCamera = false;
 		anRedTimer.SetTrigger ("lightImpulseUsed");
-		//returnLightImpulse(oldSizeCamera);
 	}
 
 	IEnumerator WaitLightRestart(float delay){
 		yield return new WaitForSeconds(delay);
 		lightImpulse = false;
-	}
-
-	IEnumerator WaitUpdateImage(float delay){
-		yield return new WaitForSeconds(delay);
-		canUpdateImage = true;
 	}
 
 	public void returnLightImpulse(float oldSizeCamera){
@@ -459,7 +430,6 @@ public class GameManager : MonoBehaviour {
 		anYellowTimer = (GameObject.FindGameObjectWithTag ("yellowTimer")).GetComponent<Animator> () as Animator;
 		anLoading = (GameObject.Find ("Loading")).GetComponent<Animator>() as Animator;
 		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
-		canUpdateImage = true;
 
 		tutorialText = GameObject.Find ("TutorialText").GetComponent<Text> () as Text;
 		anTutorial = GameObject.Find ("TutorialText").GetComponent<Animator> () as Animator;

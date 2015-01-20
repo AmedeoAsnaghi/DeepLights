@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using System.Collections;
+using UnityEngine.UI;
 
 public class guiStatus : MonoBehaviour {
 
@@ -14,42 +15,39 @@ public class guiStatus : MonoBehaviour {
 	private int currentHealthFrame;
 	private object[] objects;
 
-	public float x = 0;
-	public float y = 0.9f;
 
-	GUITexture gt;
-	Texture[] decreaseLifeTextures;
-	Texture[] increaseLifeTextures;
+	Image image;
+	Texture2D[] decreaseLifeTextures;
+	Texture2D[] increaseLifeTextures;
 
 	void Start () {
 		GameObject controller = GameObject.Find("Controller");
 		gameManager = controller.GetComponent<GameManager> () as GameManager;
 		health = gameManager.showCurrentLife();
 		oldHealth = health;
-		gt = gameObject.GetComponent<GUITexture> () as GUITexture;
-		gt.transform.position = new Vector3(x,y,0);
-		gt.transform.localScale = Vector3.zero;
+		image = gameObject.GetComponent<Image> () as Image;
 		increaseLife = new Queue ();
 
-		this.objects = Resources.LoadAll("LifeDecrease", typeof(Texture)); 
+		this.objects = Resources.LoadAll("LifeDecrease", typeof(Texture2D)); 
 
-		this.decreaseLifeTextures = new Texture[this.objects.Length];
+		this.decreaseLifeTextures = new Texture2D[this.objects.Length];
 		for(int i=0; i < objects.Length;i++)  
 		{  
-			this.decreaseLifeTextures[i] = (Texture)this.objects[i];  
+			this.decreaseLifeTextures[i] = (Texture2D)this.objects[i];  
 		}   
 
-		this.objects = Resources.LoadAll("LifeIncrease", typeof(Texture)); 
+		this.objects = Resources.LoadAll("LifeIncrease", typeof(Texture2D)); 
 		
-		this.increaseLifeTextures = new Texture[this.objects.Length];
+		this.increaseLifeTextures = new Texture2D[this.objects.Length];
 		for(int i=0; i < objects.Length;i++)  
 		{  
-			this.increaseLifeTextures[i] = (Texture)this.objects[i];  
+			this.increaseLifeTextures[i] = (Texture2D)this.objects[i];  
 		}   
 
 		currentHealthFrame = (100 - health) * 12 / 20;
-		gt.texture = this.decreaseLifeTextures[currentHealthFrame];
-		gt.pixelInset = new Rect(40, -30, 220,50);
+		Texture2D texture = this.decreaseLifeTextures[currentHealthFrame];
+		image.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+
 		running = false;
 	}
 
@@ -82,14 +80,15 @@ public class guiStatus : MonoBehaviour {
 				StartCoroutine (DecreaseLife (0.01f, deltaHealth));
 			}
 		}
-		gt.pixelInset = new Rect(40, -30, 220,50);
 	}
 
 	IEnumerator DecreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
 		int i = currentHealthFrame;
-		if (currentHealthFrame<this.decreaseLifeTextures.Length)
-			gt.texture = this.decreaseLifeTextures[i+1];
+		if (currentHealthFrame < this.decreaseLifeTextures.Length) {
+			Texture2D texture = this.decreaseLifeTextures [i + 1];
+			image.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
+		}
 		i++;
 		count ++;
 		currentHealthFrame = i;
@@ -103,8 +102,10 @@ public class guiStatus : MonoBehaviour {
 	IEnumerator IncreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
 		int i = 49 - currentHealthFrame;
-		if (currentHealthFrame<this.decreaseLifeTextures.Length)
-			gt.texture = this.increaseLifeTextures[i];
+		if (currentHealthFrame < this.decreaseLifeTextures.Length) {
+			Texture2D texture = this.increaseLifeTextures[i];
+			image.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));		
+		}
 		i++;
 		count++;
 		currentHealthFrame = 49 - i;
