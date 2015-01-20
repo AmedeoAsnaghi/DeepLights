@@ -134,13 +134,13 @@
 	
 
 		//-------POWERS-------
-		if (getLightImpulse ()) {
+		if (getLightImpulse () && !gameManager.getMustYellow() && !gameManager.getMustBlue()) {
 			gameManager.doLightImpulse ();
 		}
-		if (getBarrier ()) {
-			gameManager.doBarrier();		
+		else if (getBarrier () && !gameManager.getMustYellow() && !gameManager.getMustRed()) {
+			gameManager.doBarrier();
 		}
-		if (getFlash ()) {
+		else if (getFlash () && !gameManager.getMustRed() && !gameManager.getMustBlue()) {
 			gameManager.doFlash();		
 		}
 	}

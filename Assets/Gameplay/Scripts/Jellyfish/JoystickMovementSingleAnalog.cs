@@ -15,7 +15,8 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 	public float maxSpeed = 2f;
 	
 	private bool canMove;
-	
+
+
 	#region READ_KEYS
 	float getTurn() {
 		return Input.GetAxis("Horizontal");
@@ -45,7 +46,7 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 		newAngle = rigidBody.transform.eulerAngles;
 	}
 	
-	
+
 	// Update is called once per frame
 	void Update () {
 		var currentState  = an.GetCurrentAnimatorStateInfo(0);	
@@ -93,13 +94,13 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 
 		
 		//-------POWERS-------
-		if (getLightImpulse ()) {
+		if (getLightImpulse () && !gameManager.getMustYellow() && !gameManager.getMustBlue()) {
 			gameManager.doLightImpulse ();
 		}
-		if (getBarrier ()) {
+		else if (getBarrier () && !gameManager.getMustYellow() && !gameManager.getMustRed()) {
 			gameManager.doBarrier();
 		}
-		if (getFlash ()) {
+		else if (getFlash () && !gameManager.getMustRed() && !gameManager.getMustBlue()) {
 			gameManager.doFlash();		
 		}
 	}

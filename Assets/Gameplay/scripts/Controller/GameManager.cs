@@ -39,7 +39,9 @@ public class GameManager : MonoBehaviour {
 	private Animator anYellowTimer;
 
 	private bool unlockImpulse, unlockBarrier, unlockFlash;
-
+	private bool mustYellow, mustBlue, mustRed;
+	private int tryRed,tryBlue,tryYellow;
+	
 	//colors
 	private Color currentColor;
 	private Color currentLightColor;
@@ -52,6 +54,8 @@ public class GameManager : MonoBehaviour {
 	public Color grey;
 	public Color lightGrey;
 
+	private AudioSource barrierAudio;
+
 
 	private CircleCollider2D barrierCollider;
 
@@ -60,6 +64,7 @@ public class GameManager : MonoBehaviour {
 
 	Text tutorialText;
 	Animator anTutorial;
+
 
 	void Awake () {
 		DontDestroyOnLoad (transform.gameObject);
@@ -77,6 +82,9 @@ public class GameManager : MonoBehaviour {
 		unlockFlash = false;
 		unlockImpulse = false;
 		unlockBarrier = false;
+		mustRed = false;
+		mustBlue = false;
+		mustYellow = false;
 
 		//inizialize the colors of the jellyfish
 		currentColor = grey;
@@ -195,32 +203,71 @@ public class GameManager : MonoBehaviour {
 	}
 
 	//-----------------UNLOCK POWER-------------------------------
+	public bool getMustYellow(){
+		return mustYellow;
+	}
+
+	public bool getMustRed(){
+		return mustRed;
+	}
+
+	public bool getMustBlue(){
+		return mustBlue;
+	}
+
 
 	public void unlockImpulsePower(){
-		unlockImpulse = true;
-		tutorialText.text = "Try to press the red button..";
-		anTutorial.SetTrigger("showText");
-		anRedTimer.SetTrigger ("impulseUnlocked");
-		lightImpulseCamera = false;
-		lightImpulse = false;
-		StartCoroutine(waitText());
+		if(!unlockImpulse){
+			unlockImpulse = true;
+			tutorialText.text = "You unlocked the Radar Power! \n Press the red button to Light the Dark";
+			anTutorial.SetTrigger("showText");
+			anRedTimer.SetTrigger ("impulseUnlocked");
+			lightImpulseCamera = false;
+			lightImpulse = false;
+			tryRed++;
+			if (tryRed == 1) {
+				StartCoroutine (stopTime ());
+				StartCoroutine (waitText ());
+				mustRed = true;
+			}
+		}
 	}
 
 	public void unlockFlashPower(){
-		unlockFlash = true;
-		tutorialText.text = "Try to press the yellow button..";
-		anTutorial.SetTrigger("showText");
-		anYellowTimer.SetTrigger ("flashUnlocked");
-		StartCoroutine(waitText());
+		if(!unlockFlash){
+			unlockFlash = true;
+			tutorialText.text = "You unlocked the Flash Power! \n Press the yellow button to Stun your enemies";
+			anTutorial.SetTrigger("showText");
+			anYellowTimer.SetTrigger ("flashUnlocked");
+			tryYellow++;
+			if (tryYellow == 1) {
+				StartCoroutine (waitText ());
+				StartCoroutine (stopTime ());
+				mustYellow = true;
+			}
+		}
 	}
 
 	public void unlockBarrierPower(){
-		unlockBarrier = true;
-		tutorialText.text = "Try to press the blue button..";
-		anTutorial.SetTrigger("showText");
-		anBlueTimer.SetTrigger ("barrierUnlocked");
-		StartCoroutine(waitText());
+		if(!unlockBarrier){
+			unlockBarrier = true;
+			tutorialText.text = "You unlocked the Barrier Power! \n Press the blue button to Protect yourself";
+			anTutorial.SetTrigger("showText");
+			anBlueTimer.SetTrigger ("barrierUnlocked");
+			tryBlue++;
+			if (tryBlue == 1) {
+				StartCoroutine (waitText ());
+				StartCoroutine (stopTime ());
+				mustBlue = true;
+			}
+		}
 	}
+
+	IEnumerator stopTime(){
+		yield return new WaitForSeconds(1f);
+		Time.timeScale = 0.001f;
+	}
+
 	//------------------------------------------------------------
 
 	//-----------------CHECK POWER USAGE AND ACT------------------
@@ -247,6 +294,11 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
+		if (tryRed>0) {
+			Time.timeScale = 1;
+			tryRed = -100;
+			mustRed = false;
+		}
 		if (!lightImpulse && unlockImpulse && !pause) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
@@ -266,6 +318,11 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doBarrier(){
+		if (tryBlue>0) {
+			Time.timeScale = 1;
+			tryBlue = -100;
+			mustBlue = false;
+		}
 		if (!barrier && unlockBarrier && !pause) {
 			barrier = true;
 			invincible = true;
@@ -278,15 +335,21 @@ public class GameManager : MonoBehaviour {
 
 			anBarrier.SetBool("barrierPower", true);
 			anBlueTimer.SetTrigger("greyTimer");
+			barrierAudio.Play();
 
 			barrierCollider.radius = barrierRadius;
 
 			StartCoroutine(WaitBarrierRestart (15.2f));
-			StartCoroutine(WaitBarrierColliderReset(3f));
+			StartCoroutine(WaitBarrierColliderReset(5f));
 		}
 	}
 
 	public void doFlash(){
+		if (tryYellow>0) {
+			Time.timeScale = 1;
+			tryYellow = -100;
+			mustYellow = false;
+		}
 		if (!flash && unlockFlash && !pause) {
 			flash = true;
 
@@ -435,6 +498,12 @@ public class GameManager : MonoBehaviour {
 		anTutorial = GameObject.Find ("TutorialText").GetComponent<Animator> () as Animator;
 
 		gameOver = (GameObject.Find ("Controller")).GetComponent<GameOverMenu> () as GameOverMenu;
+
+		barrierAudio = GameObject.FindGameObjectWithTag ("barrier").GetComponent<AudioSource> () as AudioSource;
+
+		tryBlue = 0;
+		tryRed = 0;
+		tryYellow = 0;
 		if (level != 0)
 			anLoading.SetTrigger ("stopLoading");
 	}
