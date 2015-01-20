@@ -55,6 +55,8 @@ public class GameManager : MonoBehaviour {
 	public Color lightGrey;
 
 	private AudioSource barrierAudio;
+	private AudioSource impulseAudio;
+	private AudioSource flashAudio;
 
 
 	private CircleCollider2D barrierCollider;
@@ -311,6 +313,7 @@ public class GameManager : MonoBehaviour {
 
 			anImpulse.SetBool ("impulsePower", true);
 			anRedTimer.SetTrigger("greyTimer");
+			impulseAudio.Play();
 
 			StartCoroutine (WaitLightRestart(15.2f));
 			StartCoroutine (WaitLightImpulse (3f, oldSizeCamera));
@@ -361,6 +364,7 @@ public class GameManager : MonoBehaviour {
 
 			anFlash.SetBool("flashPower",true);
 			anYellowTimer.SetTrigger("greyTimer");
+			flashAudio.Play ();
 
 			StartCoroutine(WaitFlashRestart(15.2f));
 			StartCoroutine(WaitFlashEnd(0.5f));
@@ -500,6 +504,18 @@ public class GameManager : MonoBehaviour {
 		gameOver = (GameObject.Find ("Controller")).GetComponent<GameOverMenu> () as GameOverMenu;
 
 		barrierAudio = GameObject.FindGameObjectWithTag ("barrier").GetComponent<AudioSource> () as AudioSource;
+		impulseAudio = GameObject.FindGameObjectWithTag ("impulse").GetComponent<AudioSource> () as AudioSource;
+		flashAudio = GameObject.FindGameObjectWithTag ("flash").GetComponent<AudioSource> () as AudioSource;
+
+		if (unlockBarrierPower) {
+			anBlueTimer.SetTrigger("greyTimer");		
+		}
+		if (unlockFlashPower) {
+			anYellowTimer.SetTrigger("greyTimer");		
+		}
+		if (unlockImpulsePower) {
+			anRedTimer.SetTrigger("greyTimer");		
+		}
 
 		tryBlue = 0;
 		tryRed = 0;
