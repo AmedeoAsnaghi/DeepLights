@@ -66,6 +66,15 @@ public class collisions : MonoBehaviour {
 			anTutorial.SetTrigger("showText");
 			StartCoroutine(waitText());
 		}
+		else if(other.gameObject.tag == "redPower"){
+			gameManager.unlockImpulsePower();
+		}
+		else if (other.gameObject.tag == "bluePower"){
+			gameManager.unlockBarrierPower();
+		}
+		else if (other.gameObject.tag == "yellowPower"){
+			gameManager.unlockFlashPower();
+		}
 
 	}
 

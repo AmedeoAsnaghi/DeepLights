@@ -43,6 +43,8 @@ public class GameManager : MonoBehaviour {
 	Texture2D[] activationBluePower;
 	Texture2D[] activationYellowPower;
 
+	private bool unlockImpulse, unlockBarrier, unlockFlash;
+
 	//colors
 	private Color currentColor;
 	private Color currentLightColor;
@@ -75,6 +77,11 @@ public class GameManager : MonoBehaviour {
 		totalRedEnergyCollected = 0;
 		totalYellowEnergyCollected = 0;
 		pause = false;
+
+		//set unlockPower 
+		unlockFlash = false;
+		unlockImpulse = false;
+		unlockBarrier = false;
 
 		//inizialize the colors of the jellyfish
 		currentColor = grey;
@@ -170,71 +177,15 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void blueSphereCatched(){
-		if ((canUpdateImage)&&(!pause)) {
-			Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
-			totalBlueEnergyCollected += 1;
-			if (totalBlueEnergyCollected<activationBluePower.Length) {
-				Texture2D texture = activationBluePower [totalBlueEnergyCollected];
-				blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
-			}
-			else {
-				blueImage.overrideSprite = null;
-			}
-			if(totalBlueEnergyCollected==5){
-				tutorialText.text = "Try to press the blue button..";
-				anTutorial.SetTrigger("showText");
-				StartCoroutine(waitText());
-			}
-
-			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(1.5f));
-		}
-		Debug.Log (totalBlueEnergyCollected);
+		totalBlueEnergyCollected += 1;
 	}
 
 	public void yellowSphereCatched() {
-		if ((canUpdateImage)&&(!pause)) {
-			Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
-			totalYellowEnergyCollected += 1;
-			if (totalYellowEnergyCollected<activationYellowPower.Length) {
-				Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
-				yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
-			}
-			else {
-				yellowImage.overrideSprite = null;
-			}
-			if(totalYellowEnergyCollected==5){
-				tutorialText.text = "Try to press the yellow button..";
-				anTutorial.SetTrigger("showText");
-				StartCoroutine(waitText());
-			}
-
-			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(1f));
-		}
+		totalYellowEnergyCollected += 1;
 	}
 
 	public void redSphereCatched(){
-		if ((canUpdateImage)&&(!pause)) {
-			Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
-			totalRedEnergyCollected += 1;
-			if (totalRedEnergyCollected<activationRedPower.Length){
-				Texture2D texture = activationRedPower [totalRedEnergyCollected];
-				redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
-			}
-			else {
-				redImage.overrideSprite = null;
-			}
-			if(totalRedEnergyCollected==5){
-				tutorialText.text = "Try to press the red button..";
-				anTutorial.SetTrigger("showText");
-				lightImpulseCamera = false;
-				lightImpulse = false;
-				StartCoroutine(waitText());
-			}
-			canUpdateImage = false;
-			StartCoroutine(WaitUpdateImage(1f));
-		}
+		totalRedEnergyCollected += 1;
 	}
 
 	public void showUpdatedScore() {
@@ -272,6 +223,32 @@ public class GameManager : MonoBehaviour {
 		showUpdatedScore ();
 	}
 
+	//-----------------UNLOCK POWER-------------------------------
+
+	public void unlockImpulsePower(){
+		unlockImpulse = true;
+		tutorialText.text = "Try to press the red button..";
+		anTutorial.SetTrigger("showText");
+		lightImpulseCamera = false;
+		lightImpulse = false;
+		StartCoroutine(waitText());
+	}
+
+	public void unlockFlashPower(){
+		unlockFlash = true;
+		tutorialText.text = "Try to press the yellow button..";
+		anTutorial.SetTrigger("showText");
+		StartCoroutine(waitText());
+	}
+
+	public void unlockBarrierPower(){
+		unlockBarrier = true;
+		tutorialText.text = "Try to press the blue button..";
+		anTutorial.SetTrigger("showText");
+		StartCoroutine(waitText());
+	}
+	//------------------------------------------------------------
+
 	//-----------------CHECK POWER USAGE AND ACT------------------
 	void checkForLightImpulse ()
 	{	
@@ -296,7 +273,7 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- SUPER POWERS ---------------------------------------
 	public void doLightImpulse(){
-		if (!lightImpulse && totalRedEnergyCollected>=5 && !pause) {
+		if (!lightImpulse && unlockImpulse && !pause) {
 			lightImpulseCamera = true;
 			lightImpulse = true;
 
@@ -314,7 +291,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doBarrier(){
-		if (!barrier && totalBlueEnergyCollected>=5 && !pause) {
+		if (!barrier && unlockBarrier && !pause) {
 			barrier = true;
 			invincible = true;
 
@@ -334,7 +311,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void doFlash(){
-		if (!flash && totalYellowEnergyCollected>=5 && !pause) {
+		if (!flash && unlockFlash && !pause) {
 			flash = true;
 
 			//update color
@@ -483,22 +460,7 @@ public class GameManager : MonoBehaviour {
 		anLoading = (GameObject.Find ("Loading")).GetComponent<Animator>() as Animator;
 		barrierCollider = (GameObject.FindGameObjectWithTag ("barrier")).GetComponent<CircleCollider2D> () as CircleCollider2D;
 		canUpdateImage = true;
-		if (totalBlueEnergyCollected < activationBluePower.Length) {
-						Image blueImage = GameObject.FindGameObjectWithTag ("blueTimer").GetComponent<Image> ();
-						Texture2D texture = activationBluePower [totalBlueEnergyCollected];
-						blueImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
-		}
 
-		if (totalYellowEnergyCollected < activationYellowPower.Length) {
-						Image yellowImage = GameObject.FindGameObjectWithTag ("yellowTimer").GetComponent<Image> ();
-						Texture2D texture = activationYellowPower [totalYellowEnergyCollected];
-						yellowImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
-				}
-		if (totalRedEnergyCollected < activationRedPower.Length) {
-						Image redImage = GameObject.FindGameObjectWithTag ("redTimer").GetComponent<Image> ();
-						Texture2D texture = activationRedPower [totalRedEnergyCollected];
-						redImage.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
-				}
 		tutorialText = GameObject.Find ("TutorialText").GetComponent<Text> () as Text;
 		anTutorial = GameObject.Find ("TutorialText").GetComponent<Animator> () as Animator;
 
