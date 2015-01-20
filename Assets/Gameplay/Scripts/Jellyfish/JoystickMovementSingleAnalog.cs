@@ -55,12 +55,20 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 		{
 
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
+				{
 				rigidBody.AddForce (new Vector2(getTurn() * speed, getThrust() * speed), ForceMode2D.Impulse);
+
+			}
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
+			{
 				rigidBody.AddForce (-transform.up * speed);
+
+			}
 			if (!i_am_moving) {
 				i_am_moving = true;
 				an.SetBool ("is_moving", true);
+
+
 			}
 
 			var angleRadians=Mathf.Atan2(getThrust(), getTurn());
@@ -71,9 +79,6 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 			}
 
 			newAngle = new Vector3(0,0,angleDegrees);
-			//var newZ = Mathf.Lerp(rigidBody.transform.eulerAngles,newAngle,Time.deltaTime * 2f);
-
-			//rigidBody.transform.eulerAngles =	rigidBody.transform.eulerAngles,newAngle,Time.deltaTime * 2f);
 
 			transform.rotation = Quaternion.Lerp(rigidBody.transform.rotation, Quaternion.Euler(newAngle),Time.deltaTime * rotationSpeed);	
 
@@ -81,7 +86,8 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 		else {
 			if (i_am_moving) {
 				i_am_moving = false;
-				an.SetBool ("is_moving", false);
+				an.SetBool ("is_moving", false);	
+
 			}
 		}
 
