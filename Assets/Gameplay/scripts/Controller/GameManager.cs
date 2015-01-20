@@ -507,13 +507,13 @@ public class GameManager : MonoBehaviour {
 		impulseAudio = GameObject.FindGameObjectWithTag ("impulse").GetComponent<AudioSource> () as AudioSource;
 		flashAudio = GameObject.FindGameObjectWithTag ("flash").GetComponent<AudioSource> () as AudioSource;
 
-		if (unlockBarrierPower) {
+		if (unlockBarrier) {
 			anBlueTimer.SetTrigger("greyTimer");		
 		}
-		if (unlockFlashPower) {
+		if (unlockFlash) {
 			anYellowTimer.SetTrigger("greyTimer");		
 		}
-		if (unlockImpulsePower) {
+		if (unlockImpulse) {
 			anRedTimer.SetTrigger("greyTimer");		
 		}
 
