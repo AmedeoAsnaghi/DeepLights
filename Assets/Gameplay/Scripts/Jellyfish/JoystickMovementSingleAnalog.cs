@@ -13,6 +13,8 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 	public float accellerationStep = 0.03f;
 	public float speed = 0.01f;
 	public float maxSpeed = 2f;
+
+	public float dashSpeed = 200f;
 	
 	private bool canMove;
 
@@ -35,6 +37,10 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 	bool getFlash(){
 		return Input.GetButtonDown ("Flash");
 	}
+
+	bool getDash(){
+		return Input.GetButton ("Dash");
+	}
 	#endregion
 	
 	// Use this for initialization
@@ -54,10 +60,13 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 		/*----GO STRAIGHT AND TURN----*/
 		if (getThrust ()!=0 || getTurn() != 0)
 		{
-
+			if (getDash ()) 
+				dashSpeed = 0.5f;
+			else
+				dashSpeed=0f;
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
 				{
-				rigidBody.AddForce (new Vector2(getTurn() * speed, getThrust() * speed), ForceMode2D.Impulse);
+				rigidBody.AddForce (new Vector2(getTurn() * (speed + dashSpeed), getThrust() * (speed+ dashSpeed)), ForceMode2D.Impulse);
 
 			}
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
@@ -91,6 +100,9 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 
 			}
 		}
+
+
+
 
 		
 		//-------POWERS-------
