@@ -61,7 +61,7 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 		if (getThrust ()!=0 || getTurn() != 0)
 		{
 			if (getDash ()) 
-				dashSpeed = 0.5f;
+				dashSpeed = 0.2f;
 			else
 				dashSpeed=0f;
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
