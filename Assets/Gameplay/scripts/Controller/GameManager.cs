@@ -508,13 +508,13 @@ public class GameManager : MonoBehaviour {
 		flashAudio = GameObject.FindGameObjectWithTag ("flash").GetComponent<AudioSource> () as AudioSource;
 
 		if (unlockBarrier) {
-			anBlueTimer.SetTrigger("greyTimer");		
+			anBlueTimer.SetTrigger("barrierUnlocked");		
 		}
 		if (unlockFlash) {
-			anYellowTimer.SetTrigger("greyTimer");		
+			anYellowTimer.SetTrigger("flashUnlocked");		
 		}
 		if (unlockImpulse) {
-			anRedTimer.SetTrigger("greyTimer");		
+			anRedTimer.SetTrigger("impulseUnlocked");		
 		}
 
 		tryBlue = 0;
