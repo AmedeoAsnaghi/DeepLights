@@ -462,6 +462,11 @@ public class GameManager : MonoBehaviour {
 		anTutorial.SetTrigger("hideText");
 	}
 
+	IEnumerator initTutorial() {
+		yield return new WaitForSeconds (6.5f);
+		tutorialText.text = "Move the Jelly with the left analog stick";
+	}
+
 	public void resetStatus(){
 		currentJellyFishLife = 100;
 	}
@@ -523,6 +528,10 @@ public class GameManager : MonoBehaviour {
 		tryYellow = 0;
 		if (level != 0)
 			anLoading.SetTrigger ("stopLoading");
+
+		if (level == 2) {
+			StartCoroutine(initTutorial());
+		}
 	}
 }
 	
