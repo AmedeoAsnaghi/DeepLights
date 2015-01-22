@@ -438,6 +438,7 @@ public class GameManager : MonoBehaviour {
 		if (canChangeLevel) {
 			anLoading.SetTrigger("startLoading");
 			canChangeLevel = false;
+			(jellyFish.GetComponent<Animator>()as Animator).SetBool("initLoading",true);
 			StartCoroutine(nextLevel(1f));
 			StartCoroutine (WaitLevel(10f));
 		}
