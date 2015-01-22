@@ -85,7 +85,8 @@ public class guiStatus : MonoBehaviour {
 	IEnumerator DecreaseLife(float delay, float deltaHealth){
 		yield return new WaitForSeconds(delay);
 		int i = currentHealthFrame;
-		if (currentHealthFrame < this.decreaseLifeTextures.Length) {
+		Debug.Log (currentHealthFrame);
+		if (currentHealthFrame < this.decreaseLifeTextures.Length - 1) {
 			Texture2D texture = this.decreaseLifeTextures [i + 1];
 			image.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 		}

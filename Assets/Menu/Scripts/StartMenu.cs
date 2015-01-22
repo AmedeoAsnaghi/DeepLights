@@ -18,7 +18,7 @@ public class StartMenu : MonoBehaviour {
 			this.setManager();		
 		}
 
-		if (((Input.GetKeyDown (KeyCode.Return)) || (Input.GetButton ("MovementImpulse"))) && canPress) {
+		if (((Input.GetKeyDown (KeyCode.Return)) || (Input.GetButton ("Dash"))) && canPress) {
 			anGui.SetTrigger ("startGame");
 			canPress = false;
 			StartCoroutine(LoadLevelCoroutine());
@@ -42,7 +42,7 @@ public class StartMenu : MonoBehaviour {
 
 	IEnumerator LoadLevelCoroutine() {
 		yield return new WaitForSeconds (1f);
-		Application.LoadLevel (1);
+		Application.LoadLevel (2);
 	}
 
 }

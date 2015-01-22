@@ -37,7 +37,7 @@ public class GameOverMenu : MonoBehaviour {
 					StartCoroutine(waitAxis());
 				}
 			}
-			if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("MovementImpulse"))){
+			if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("Dash"))){
 				if (selection == 1){
 					anRight.SetTrigger("press");
 				}

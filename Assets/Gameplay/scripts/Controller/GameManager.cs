@@ -74,7 +74,7 @@ public class GameManager : MonoBehaviour {
 
 	// Use this for initialization
 	void Start () {
-		level = 1;
+		level = 2;
 		totalBlueEnergyCollected = 0;
 		totalRedEnergyCollected = 0;
 		totalYellowEnergyCollected = 0;
@@ -97,7 +97,7 @@ public class GameManager : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
-		if (level == 0) {
+		if (level == 0 || level == 1) {
 			DestroyImmediate(gameObject);		
 		}
 		if (mainCamera == null) {
@@ -429,7 +429,7 @@ public class GameManager : MonoBehaviour {
 	}
 
 	public void loadMenu() {
-		level = 0;
+		level = 1;
 		Application.LoadLevel (level);
 
 	}
@@ -467,7 +467,7 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- END CHANGE LEVEL ---------------------------------------
 	public void setManager() {
-		if (level == 0) {
+		if (level == 0 || level == 1) {
 			DestroyImmediate(gameObject);
 		}
 		canChangeLevel = true;
