@@ -45,6 +45,7 @@ public class PauseMenu : MonoBehaviour {
 				selection = 0;
 				anMiddle.SetTrigger("press");
 				pauseGame = false;
+				gm.setPause(false);
 				updateSelection();
 				StartCoroutine(press ());
 			}
@@ -113,7 +114,6 @@ public class PauseMenu : MonoBehaviour {
 		if(selection==0){
 			anMiddle.SetInteger("hover",1);
 			Time.timeScale = 1;
-			ambientAudio.audio.Play ();
 		}
 		else if (selection == 1){
 			Time.timeScale = 1;
