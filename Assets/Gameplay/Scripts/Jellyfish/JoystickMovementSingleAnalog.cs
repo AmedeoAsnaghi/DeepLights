@@ -66,12 +66,12 @@ public class JoystickMovementSingleAnalog : MonoBehaviour {
 				dashSpeed=0f;
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Moving")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
 				{
-				rigidBody.AddForce (new Vector2(getTurn() * (speed + dashSpeed), getThrust() * (speed+ dashSpeed)), ForceMode2D.Impulse);
+				rigidBody.AddForce (new Vector2(getTurn() * (speed + dashSpeed) , getThrust() * (speed+ dashSpeed))*Time.deltaTime, ForceMode2D.Impulse);
 
 			}
 			if ((currentState.nameHash == Animator.StringToHash ("Base Layer.Charging")) && rigidBody.velocity.sqrMagnitude < (Vector3.one * maxSpeed).sqrMagnitude)
 			{
-				rigidBody.AddForce (-transform.up * speed);
+				rigidBody.AddForce (-transform.up * speed * Time.deltaTime);
 
 			}
 			if (!i_am_moving) {

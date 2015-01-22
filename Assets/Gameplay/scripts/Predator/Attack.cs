@@ -43,13 +43,13 @@ public class Attack : MonoBehaviour {
 				}
 				else{
 					if(countRange < range && !back){
-						transform.position += (dir/dir.magnitude) * step;
+						transform.position += (dir/dir.magnitude) * step * Time.deltaTime;
 						countRange+=step;
 					}
 					else{
 						back = true;
 						countRange-=step;
-						transform.position -= (dir/dir.magnitude) * step;
+						transform.position -= (dir/dir.magnitude) * step * Time.deltaTime;
 						if(countRange <= 0)
 						{
 							back = false;
