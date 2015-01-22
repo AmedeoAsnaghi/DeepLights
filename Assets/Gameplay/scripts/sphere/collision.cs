@@ -8,11 +8,13 @@ public class collision : MonoBehaviour {
 
 	ParticleSystem[] ps;
 	bool explode;
+	AudioSource sound;
 
 	// Use this for initialization
 	void Start () {
 		ps = GetComponentsInChildren<ParticleSystem> (false) as ParticleSystem[];
 		explode = false;
+		sound = GetComponent<AudioSource> () as AudioSource;
 	}
 	
 	// Update is called once per frame
@@ -30,6 +32,7 @@ public class collision : MonoBehaviour {
 			if (gameObject.tag != "yellowPower" && gameObject.tag != "bluePower" && gameObject.tag != "redPower"){
 				ps[2].maxParticles = maxParticles;
 			}
+			sound.Play ();
 			StartCoroutine(WaitToExplode());
 		} 
 	}
