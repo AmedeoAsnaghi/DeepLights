@@ -37,7 +37,6 @@ public class PauseMenu : MonoBehaviour {
 				canChange = true;
 				anGui.SetTrigger("startPause");
 				Time.timeScale = 0.001f;
-				ambientAudio.audio.Stop ();
 				pauseGame = true;
 				updateSelection();
 			}
@@ -137,6 +136,5 @@ public class PauseMenu : MonoBehaviour {
 		anMiddle = (GameObject.Find ("Middle")).GetComponent<Animator> () as Animator;
 		anRight = (GameObject.Find ("Right")).GetComponent<Animator> () as Animator;
 		gm = GameObject.Find ("Controller").GetComponent<GameManager> () as GameManager;
-		ambientAudio = gm.GetComponent<AudioSource> () as AudioSource;
 	}
 }
