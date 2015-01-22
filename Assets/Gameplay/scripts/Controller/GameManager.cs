@@ -438,7 +438,7 @@ public class GameManager : MonoBehaviour {
 		if (canChangeLevel) {
 			anLoading.SetTrigger("startLoading");
 			canChangeLevel = false;
-			StartCoroutine(nextLevel(3f));
+			StartCoroutine(nextLevel(1f));
 			StartCoroutine (WaitLevel(10f));
 		}
 	}
