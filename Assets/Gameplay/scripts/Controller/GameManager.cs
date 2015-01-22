@@ -220,7 +220,6 @@ public class GameManager : MonoBehaviour {
 
 	public void unlockImpulsePower(){
 		if(!unlockImpulse){
-			unlockImpulse = true;
 			tutorialText.text = "You unlocked the Radar Power! \n Press the red button to Light the Dark";
 			anTutorial.SetTrigger("showText");
 			anRedTimer.SetTrigger ("impulseUnlocked");
@@ -228,7 +227,7 @@ public class GameManager : MonoBehaviour {
 			lightImpulse = false;
 			tryRed++;
 			if (tryRed == 1) {
-				StartCoroutine (stopTime ());
+				StartCoroutine (stopTime (0));
 				StartCoroutine (waitText ());
 				mustRed = true;
 			}
@@ -237,14 +236,13 @@ public class GameManager : MonoBehaviour {
 
 	public void unlockFlashPower(){
 		if(!unlockFlash){
-			unlockFlash = true;
 			tutorialText.text = "You unlocked the Flash Power! \n Press the yellow button to Stun your enemies";
 			anTutorial.SetTrigger("showText");
 			anYellowTimer.SetTrigger ("flashUnlocked");
 			tryYellow++;
 			if (tryYellow == 1) {
 				StartCoroutine (waitText ());
-				StartCoroutine (stopTime ());
+				StartCoroutine (stopTime (2));
 				mustYellow = true;
 			}
 		}
@@ -252,21 +250,29 @@ public class GameManager : MonoBehaviour {
 
 	public void unlockBarrierPower(){
 		if(!unlockBarrier){
-			unlockBarrier = true;
 			tutorialText.text = "You unlocked the Barrier Power! \n Press the blue button to Protect yourself";
 			anTutorial.SetTrigger("showText");
 			anBlueTimer.SetTrigger ("barrierUnlocked");
 			tryBlue++;
 			if (tryBlue == 1) {
 				StartCoroutine (waitText ());
-				StartCoroutine (stopTime ());
+				StartCoroutine (stopTime (1));
 				mustBlue = true;
 			}
 		}
 	}
 
-	IEnumerator stopTime(){
+	IEnumerator stopTime(int selection){
 		yield return new WaitForSeconds(1f);
+		if (selection == 0){
+			unlockImpulse = true;
+		}
+		else if (selection == 1){
+			unlockBarrier = true;
+		}
+		else if (selection == 2){
+			unlockFlash = true;
+		}
 		Time.timeScale = 0.001f;
 	}
 
