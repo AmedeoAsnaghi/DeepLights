@@ -75,19 +75,19 @@ public class guiStatus : MonoBehaviour {
 
 		if (running) {
 			if (increase) {
-				StartCoroutine (IncreaseLife (0.01f, deltaHealth));
+				StartCoroutine (IncreaseLife (0.01f));
 			} else {
-				StartCoroutine (DecreaseLife (0.01f, deltaHealth));
+				StartCoroutine (DecreaseLife (0.01f));
 			}
 		}
 	}
 
-	IEnumerator DecreaseLife(float delay, float deltaHealth){
+	IEnumerator DecreaseLife(float delay){
 		yield return new WaitForSeconds(delay);
 		int i = currentHealthFrame;
 		Debug.Log (currentHealthFrame);
-		if (currentHealthFrame < this.decreaseLifeTextures.Length - 1) {
-			Texture2D texture = this.decreaseLifeTextures [i + 1];
+		if (currentHealthFrame < this.decreaseLifeTextures.Length) {
+			Texture2D texture = this.decreaseLifeTextures [i];
 			image.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));
 		}
 		i++;
@@ -100,16 +100,16 @@ public class guiStatus : MonoBehaviour {
 		}
 	}
 
-	IEnumerator IncreaseLife(float delay, float deltaHealth){
+	IEnumerator IncreaseLife(float delay){
 		yield return new WaitForSeconds(delay);
-		int i = 49 - currentHealthFrame;
-		if (currentHealthFrame < this.decreaseLifeTextures.Length) {
+		int i = 48 - currentHealthFrame;
+		if (i < this.decreaseLifeTextures.Length) {
 			Texture2D texture = this.increaseLifeTextures[i];
 			image.overrideSprite = Sprite.Create (texture, new Rect (0, 0, texture.width, texture.height), new Vector2 (0, 0));		
 		}
 		i++;
 		count++;
-		currentHealthFrame = 49 - i;
+		currentHealthFrame = 48 - i;
 
 		if (11 == count) {
 			running = false;	
