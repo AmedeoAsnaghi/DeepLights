@@ -477,6 +477,17 @@ public class GameManager : MonoBehaviour {
 		currentJellyFishLife = 100;
 	}
 
+	public void endGame(){
+		GameObject.Find ("Energy").SetActive (false);
+		(GameObject.Find ("TheEnd").GetComponent<Animator> () as Animator).SetTrigger ("TheEnd");
+		StartCoroutine (restartGame ());
+	}
+
+	IEnumerator restartGame(){
+		yield return new WaitForSeconds (20f);
+		loadMenu ();
+	}
+
 	//--------------------------------------- END CHANGE LEVEL ---------------------------------------
 	public void setManager() {
 		if (level == 0 || level == 1) {

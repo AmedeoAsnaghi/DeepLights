@@ -75,7 +75,9 @@ public class collisions : MonoBehaviour {
 		else if (other.gameObject.tag == "yellowPower"){
 			gameManager.unlockFlashPower();
 		}
-
+		else if (other.gameObject.tag == "end"){
+			gameManager.endGame();
+		}
 	}
 
 	IEnumerator waitText() {
