@@ -13,7 +13,6 @@ public class PauseMenu : MonoBehaviour {
 	private bool canChange;
 	private Camera mainCamera;
 	private AudioSource audioGui;
-	private AudioSource ambientAudio;
 	// Use this for initialization
 	void Start () {
 		setManager ();

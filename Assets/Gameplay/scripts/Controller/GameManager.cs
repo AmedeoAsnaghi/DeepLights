@@ -470,7 +470,7 @@ public class GameManager : MonoBehaviour {
 
 	IEnumerator initTutorial() {
 		yield return new WaitForSeconds (6.5f);
-		tutorialText.text = "Move the Jelly with the left analog stick";
+		tutorialText.text = "Move the Jellyfish with the left analog stick";
 	}
 
 	public void resetStatus(){
@@ -490,7 +490,7 @@ public class GameManager : MonoBehaviour {
 
 	//--------------------------------------- END CHANGE LEVEL ---------------------------------------
 	public void setManager() {
-		if (level == 0 || level == 1) {
+		if ((level == 0 || level == 1) && gameObject) {
 			DestroyImmediate(gameObject);
 		}
 		canChangeLevel = true;
@@ -543,7 +543,7 @@ public class GameManager : MonoBehaviour {
 		tryBlue = 0;
 		tryRed = 0;
 		tryYellow = 0;
-		if (level != 0)
+		if (level != 1)
 			anLoading.SetTrigger ("stopLoading");
 
 		if (level == 2) {

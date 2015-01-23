@@ -55,12 +55,12 @@ public class GameOverMenu : MonoBehaviour {
 	}
 
 	IEnumerator waitAxis(){
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.002f);
 		canChange = true;
 	}
 
 	IEnumerator press() {
-		yield return new WaitForSeconds (0.5f);
+		yield return new WaitForSeconds (0.002f);
 		anGui.ResetTrigger("startGameOver");
 		anGui.SetTrigger("endGameOver");
 		if (selection == 1){

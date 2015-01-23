@@ -25,7 +25,7 @@ public class JoystickMovement : MonoBehaviour {
 		}
 	
 	bool getThrust(){
-		return Input.GetButton("MovementImpulse");
+		return Input.GetButton("Dash");
 	}
 
 	bool getLightImpulse(){
