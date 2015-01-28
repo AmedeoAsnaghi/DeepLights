@@ -56,6 +56,8 @@ public class StartMenu : MonoBehaviour {
 
 			} else {
 				anStart.SetTrigger ("clicked");
+				anQuit.SetTrigger("startGame");
+				anCredits.SetTrigger("startGame");
 				canPress = false;
 				StartCoroutine (WaitToStart ());
 			}
@@ -95,7 +97,7 @@ public class StartMenu : MonoBehaviour {
 	}
 
 	IEnumerator LoadLevelCoroutine() {
-		yield return new WaitForSeconds (1f);
+		yield return new WaitForSeconds (1.5f);
 		Application.LoadLevel (2);
 	}
 
