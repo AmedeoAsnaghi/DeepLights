@@ -13,6 +13,8 @@ Library/metadata
 Library/previews
 Library/guidmapper
 Library/ShaderCache
+Library/AtlasCache
+
 
 Temp
 *.csproj
@@ -20,4 +22,3 @@ Temp
 *.sln
 *.dwlt
 *.asset
-
