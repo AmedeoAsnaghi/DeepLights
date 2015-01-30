@@ -30,7 +30,7 @@ public class Credits : MonoBehaviour {
 		}
 	
 		if (shown) {
-			if (Input.GetButton("Dash") && canPress) {
+			if (Input.GetButton("Submit") && canPress) {
 				anCredits.SetTrigger("return");
 
 				canPress = false;

@@ -46,7 +46,7 @@ public class StartMenu : MonoBehaviour {
 						StartCoroutine (waitAxis ());
 				}
 		}
-		if (((Input.GetKeyDown (KeyCode.Return)) || (Input.GetButtonDown ("Dash"))) && canPress && backgroundImage.color.a == 0) {
+		if (((Input.GetKeyDown (KeyCode.Return)) || (Input.GetButtonDown ("Submit"))) && canPress && backgroundImage.color.a == 0) {
 			if (selection == 0) {
 				anCredits.SetTrigger ("clicked");
 				StartCoroutine (WaitToOpenCredits ());	

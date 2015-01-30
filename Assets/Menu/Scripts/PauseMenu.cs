@@ -72,7 +72,7 @@ public class PauseMenu : MonoBehaviour {
 					StartCoroutine(waitAxis());
 				}
 			}
-			if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("Dash"))){
+			if ((Input.GetKeyDown(KeyCode.Return))||(Input.GetButton("Submit"))){
 				if(selection==0){
 					anMiddle.SetTrigger("press");
 					pauseGame = false;
