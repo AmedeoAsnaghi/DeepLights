@@ -466,6 +466,7 @@ public class GameManager : MonoBehaviour {
 		yield return new WaitForSeconds (5f);
 		anTutorial.ResetTrigger("showText");
 		anTutorial.SetTrigger("hideText");
+		tutorialText.text = "";
 	}
 
 	IEnumerator initTutorial() {
